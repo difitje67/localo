@@ -4,232 +4,232 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOCALO | Gdje gori večeras?</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts -->
+    
+    <!-- Google Fonts - Optimizirano učitavanje -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, h4, .font-heading { font-family: 'Plus Jakarta Sans', sans-serif; }
+        /* Kompaktni reset i bazični stilovi umjesto cijelog Tailwind CDN-a */
+        *, ::before, ::after { box-sizing: border-box; border-width: 0; border-style: solid; border-color: #1f293d; }
+        html { line-height: 1.5; -webkit-text-size-adjust: 100%; font-family: 'Inter', sans-serif; }
+        body { margin: 0; background-color: #060813; color: #cbd5e1; -webkit-font-smoothing: antialiased; min-h: screen; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; color: #f1f5f9; }
+        button, input, textarea { font-family: inherit; font-size: 100%; margin: 0; padding: 0; background: none; color: inherit; border: none; }
+        button { cursor: pointer; }
+        textarea { resize: none; }
+        img { max-width: 100%; height: auto; display: block; }
+        
+        /* Pomoćne klase za brzi render */
+        .flex { display: flex; } .flex-col { flex-direction: column; } .items-center { align-items: center; } 
+        .justify-between { justify-content: space-between; } .justify-center { justify-content: center; }
+        .grid { display: grid; } .gap-4 { gap: 1rem; } .gap-6 { gap: 1.5rem; } .gap-8 { gap: 2rem; }
+        .hidden { display: none !important; } .relative { position: relative; } .fixed { position: fixed; }
+        .w-full { width: 100%; } .min-h-screen { min-height: 100vh; } .flex-1 { flex: 1 1 0%; }
+        .rounded-xl { border-radius: 0.75rem; } .rounded-2xl { border-radius: 1rem; } .rounded-3xl { border-radius: 1.5rem; } .rounded-full { border-radius: 9999px; }
+        .border { border-width: 1px; } .border-b { border-bottom-width: 1px; } .border-t { border-top-width: 1px; }
+        .p-4 { padding: 1rem; } .p-5 { padding: 1.25rem; } .p-6 { padding: 1.5rem; } .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; } .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.875rem; } .text-xl { font-size: 1.25rem; } .text-2xl { font-size: 1.5rem; }
+        .font-bold { font-weight: 700; } .font-extrabold { font-weight: 800; }
+        .overflow-hidden { overflow: hidden; } .pointer-events-none { pointer-events: none; } .transition { transition: all 0.2s ease; }
+        
+        /* Custom Unikatni Stilovi */
+        .neon-glow-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; bg: #581c87; opacity: 0.1; filter: blur(120px); z-index: 0; }
+        .neon-glow-2 { bottom: -10%; right: -10%; width: 50vw; height: 50vw; bg: #831843; opacity: 0.1; filter: blur(120px); z-index: 0; }
+        .bg-card { background-color: rgba(11, 15, 31, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(31, 41, 61, 0.8); }
+        .bg-input { background-color: rgba(18, 24, 41, 0.6); border: 1px solid rgba(31, 41, 61, 0.8); }
+        .btn-gradient { background: linear-gradient(135deg, #9333ea, #ec4899); color: white; box-shadow: 0 4px 14px rgba(147, 51, 234, 0.3); }
+        .btn-gradient:hover { filter: brightness(1.1); }
+        
+        /* Grid responsivnost bez Tailwinda */
+        .main-container { max-width: 1400px; margin: 0 auto; display: flex; flex-col: column; }
+        .main-grid { display: grid; grid-template-columns: 1fr; padding: 1rem; gap: 1.5rem; }
+        @media (min-width: 1024px) {
+            .main-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); padding: 1.5rem; gap: 2rem; }
+            .col-sidebar-left { grid-column: span 3 / span 3; }
+            .col-feed { grid-column: span 6 / span 6; }
+            .col-sidebar-right { grid-column: span 3 / span 3; }
+            .lg-block { display: block !important; }
+        }
+        .sticky-nav { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(16px); background-color: rgba(6, 8, 19, 0.7); border-bottom: 1px solid rgba(31, 41, 61, 0.6); }
+        
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #070a13; }
         ::-webkit-scrollbar-thumb { background: #1f293d; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #3b2d54; }
     </style>
 </head>
-<body class="bg-[#060813] text-slate-200 antialiased min-h-screen selection:bg-purple-500 selection:text-white">
+<body class="antialiased">
 
     <!-- POZADINSKI NEON GLOW -->
-    <div class="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-900/10 blur-[120px] pointer-events-none z-0"></div>
-    <div class="fixed bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-pink-900/10 blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed neon-glow-1 rounded-full"></div>
+    <div class="fixed neon-glow-2 rounded-full"></div>
 
     <!-- MODAL ZA PREGLED PROFILA -->
-    <div id="profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
-        <div class="bg-[#0b0f1f] border border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative">
-            <button onclick="closeProfileModal()" class="absolute top-4 right-4 z-50 bg-black/40 hover:bg-black/70 text-slate-200 p-2 rounded-full border border-slate-700/50 transition">
-                <i data-lucide="x" class="w-5 h-5"></i>
+    <div id="profile-modal" class="fixed id-modal inset-0 flex items-center justify-center p-4 hidden" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 100;">
+        <div class="bg-card rounded-3xl max-w-lg w-full overflow-hidden relative" style="background-color: #0b0f1f;">
+            <button onclick="closeProfileModal()" class="absolute style-close-btn" style="top: 1rem; right: 1rem; background: rgba(0,0,0,0.4); border: 1px solid #334155; padding: 0.5rem; border-radius: 9999px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-            <div class="h-32 bg-gradient-to-r from-purple-600 to-pink-600 relative"></div>
+            <div class="h-32" style="background: linear-gradient(to right, #9333ea, #ec4899);"></div>
             <div class="px-6 pb-6 relative">
-                <div class="absolute top-[-45px] left-6">
-                    <img id="modal-profile-avatar" src="" class="w-24 h-24 rounded-2xl object-cover ring-4 ring-[#0b0f1f] shadow-xl">
+                <div class="absolute" style="top: -45px; left: 1.5rem;">
+                    <img id="modal-profile-avatar" src="" class="w-24 h-24 rounded-2xl object-cover" style="border: 4px solid #0b0f1f;">
                 </div>
                 <div class="pt-16 flex justify-between items-start">
                     <div>
-                        <h2 id="modal-profile-name" class="text-xl font-extrabold text-slate-100"></h2>
-                        <p id="modal-profile-handle" class="text-xs text-purple-400 font-medium mt-0.5"></p>
+                        <h2 id="modal-profile-name" class="text-xl font-extrabold"></h2>
+                        <p id="modal-profile-handle" class="text-xs font-bold" style="color: #c084fc; margin-top: 0.25rem;"></p>
                     </div>
                     <div id="modal-profile-action-container"></div>
                 </div>
-                <p class="text-sm text-slate-300 mt-4 italic" id="modal-profile-bio"></p>
-                <div class="grid grid-cols-3 gap-4 mt-6 p-3 bg-[#121829]/60 border border-slate-800/60 rounded-xl text-center">
+                <p class="text-sm mt-4" id="modal-profile-bio" style="font-style: italic; color: #cbd5e1;"></p>
+                
+                <div class="grid mt-6 p-4 rounded-xl text-center bg-input" style="grid-template-columns: repeat(3, 1fr);">
                     <div>
-                        <p id="modal-profile-posts-count" class="text-base font-bold text-slate-100">0</p>
-                        <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Objave</p>
+                        <p id="modal-profile-posts-count" class="font-bold" style="font-size: 1.1rem; color: #f8fafc;">0</p>
+                        <p style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Objave</p>
                     </div>
                     <div>
-                        <p id="modal-profile-followers-count" class="text-base font-bold text-slate-100">0</p>
-                        <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Pratitelji</p>
+                        <p id="modal-profile-followers-count" class="font-bold" style="font-size: 1.1rem; color: #f8fafc;">0</p>
+                        <p style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Pratitelji</p>
                     </div>
                     <div>
-                        <p id="modal-profile-following-count" class="text-base font-bold text-slate-100">0</p>
-                        <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Prati</p>
+                        <p id="modal-profile-following-count" class="font-bold" style="font-size: 1.1rem; color: #f8fafc;">0</p>
+                        <p style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Prati</p>
                     </div>
                 </div>
                 <div class="mt-6">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
-                        <i data-lucide="wine" class="w-3.5 h-3.5 text-pink-500"></i> Istaknute objave
+                    <h4 style="font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight:700; margin-bottom: 0.75rem;" class="flex items-center gap-4">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2"><path d="M22 22H2M6 22V4c0-.6.4-1 1-1h10c.6 0 1 .4 1 1v18M10 7h4M10 11h4M10 15h4"/></svg>
+                        Istaknute objave
                     </h4>
-                    <div id="modal-profile-posts-list" class="space-y-2.5 max-h-[180px] overflow-y-auto pr-1"></div>
+                    <div id="modal-profile-posts-list" class="flex flex-col gap-4" style="max-height: 180px; overflow-y: auto;"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- NOVI MODAL ZA UREĐIVANJE PROFILA -->
-    <div id="edit-profile-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[110] hidden flex items-center justify-center p-4">
-        <div class="bg-[#0b0f1f] border border-slate-800 rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative p-6 space-y-5">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-                    <i data-lucide="user-cog" class="w-5 h-5 text-purple-500"></i> Uredi svoj profil
-                </h3>
-                <button onclick="closeEditProfileModal()" class="text-slate-400 hover:text-white transition">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
+    <!-- MODAL ZA UREĐIVANJE PROFILA -->
+    <div id="edit-profile-modal" class="fixed inset-0 flex items-center justify-center p-4 hidden" style="background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 110;">
+        <div class="bg-card p-6 rounded-3xl max-w-md w-full flex flex-col gap-4" style="background-color: #0b0f1f;">
+            <div class="flex justify-between items-center border-b" style="padding-bottom: 0.75rem; border-color: #1e293b;">
+                <h3 class="text-sm font-bold flex items-center gap-4">Uredi svoj profil</h3>
+                <button onclick="closeEditProfileModal()" style="color: #94a3b8;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
             </div>
 
-            <!-- Promjena profilne slike -->
-            <div class="flex items-center gap-4 bg-[#121829]/40 p-3 rounded-2xl border border-slate-800/60">
-                <div class="relative">
-                    <img id="edit-avatar-preview" src="" class="w-16 h-16 rounded-xl object-cover ring-2 ring-purple-500/40">
-                </div>
+            <div class="flex items-center gap-4 p-3 rounded-2xl bg-input">
+                <img id="edit-avatar-preview" src="" class="w-16 h-16 rounded-xl object-cover" style="border: 2px solid rgba(147,51,234,0.4);">
                 <div class="flex-1">
-                    <p class="text-xs font-semibold text-slate-300">Profilna fotografija</p>
+                    <p class="text-xs font-bold">Profilna fotografija</p>
                     <input type="file" id="avatar-file-input" accept="image/*" class="hidden" onchange="handleAvatarSelect(event)">
-                    <button onclick="document.getElementById('avatar-file-input').click()" class="mt-1.5 flex items-center gap-1.5 bg-purple-600/10 hover:bg-purple-600 text-purple-400 hover:text-white border border-purple-500/20 text-[11px] font-bold px-2.5 py-1.5 rounded-lg transition">
-                        <i data-lucide="upload" class="w-3.5 h-3.5"></i> Izaberi sa uređaja
-                    </button>
+                    <button onclick="document.getElementById('avatar-file-input').click()" class="text-xs font-bold px-3 py-1.5 rounded-xl mt-2 border" style="color: #a855f7; border-color: rgba(147,51,234,0.3); background: rgba(147,51,234,0.05);">Izaberi sa uređaja</button>
                 </div>
             </div>
 
-            <!-- Input polja -->
-            <div class="space-y-3.5">
+            <div class="flex flex-col gap-4">
                 <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Ime / Naziv profila</label>
-                    <input type="text" id="edit-input-name" class="w-full bg-[#121829] border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-purple-500">
+                    <label style="font-size: 10px; font-weight:700; text-transform: uppercase; color: #64748b;">Ime / Naziv profila</label>
+                    <input type="text" id="edit-input-name" class="w-full bg-input rounded-xl px-3 py-2 text-sm mt-1" style="border: 1px solid #1e293b;">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Korisničko ime (@handle)</label>
-                    <input type="text" id="edit-input-handle" class="w-full bg-[#121829] border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-purple-500">
+                    <label style="font-size: 10px; font-weight:700; text-transform: uppercase; color: #64748b;">Korisničko ime (@handle)</label>
+                    <input type="text" id="edit-input-handle" class="w-full bg-input rounded-xl px-3 py-2 text-sm mt-1" style="border: 1px solid #1e293b;">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Biografija (Opis)</label>
-                    <textarea id="edit-input-bio" class="w-full bg-[#121829] border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-purple-500 h-20 resize-none"></textarea>
+                    <label style="font-size: 10px; font-weight:700; text-transform: uppercase; color: #64748b;">Biografija (Opis)</label>
+                    <textarea id="edit-input-bio" class="w-full bg-input rounded-xl px-3 py-2 text-sm mt-1" style="height: 70px; border: 1px solid #1e293b;"></textarea>
                 </div>
             </div>
 
-            <!-- Dugmad na dnu -->
-            <div class="flex gap-3 pt-2 border-t border-slate-800/60">
-                <button onclick="closeEditProfileModal()" class="flex-1 bg-slate-800 text-slate-400 font-bold text-xs py-2.5 rounded-xl border border-slate-700/50 hover:bg-slate-700 transition">Odustani</button>
-                <button onclick="saveProfileChanges()" class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs py-2.5 rounded-xl shadow-lg shadow-purple-600/20 transition">Spremi promjene</button>
+            <div class="flex gap-4 border-t pt-4" style="border-color: #1e293b;">
+                <button onclick="closeEditProfileModal()" class="flex-1 py-2.5 rounded-xl font-bold text-xs" style="background: #1e293b; color: #94a3b8;">Odustani</button>
+                <button onclick="saveProfileChanges()" class="flex-1 py-2.5 rounded-xl font-bold text-xs btn-gradient">Spremi promjene</button>
             </div>
         </div>
     </div>
 
     <!-- GLAVNI KONTEJNER -->
-    <div class="relative z-10 max-w-[1400px] mx-auto min-h-screen flex flex-col">
+    <div class="main-container min-h-screen">
 
         <!-- NAVIGACIJA -->
-        <nav class="sticky top-0 z-50 backdrop-blur-xl bg-[#060813]/70 border-b border-slate-800/60 px-4 md:px-8 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3" onclick="renderFeed()">
-                <div class="p-2 bg-gradient-to-tr from-purple-600 to-pink-600 rounded-xl shadow-lg shadow-purple-500/20">
-                    <i data-lucide="map-pin" class="w-5 h-5 text-white animate-pulse"></i>
+        <nav class="sticky-nav px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4" onclick="renderFeed()" style="cursor: pointer;">
+                <div class="p-2 btn-gradient rounded-xl">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                 </div>
-                <h1 class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-purple-400 bg-clip-text text-transparent cursor-pointer select-none">
-                    LOCALO<span class="text-pink-500 font-black">.</span>
-                </h1>
+                <h1 class="text-2xl font-extrabold" style="letter-spacing: -0.025em;">LOCALO<span style="color: #ec4899;">.</span></h1>
             </div>
             
             <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2.5 bg-emerald-500/10 border border-emerald-500/20 px-3.5 py-1.5 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.05)]">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    <span class="text-xs font-bold text-emerald-400 tracking-wide uppercase"><span id="online-count">134</span> na mreži</span>
+                <div class="flex items-center gap-4 rounded-full px-4 py-1.5" style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2);">
+                    <span class="flex" style="width: 8px; height: 8px; background: #10b981; border-radius: 9999px;"></span>
+                    <span class="text-xs font-bold" style="color: #34d399;"><span id="online-count">134</span> ONLINE</span>
                 </div>
-                <div class="hidden sm:flex items-center gap-2 pl-2 border-l border-slate-800 cursor-pointer" onclick="openProfile('me')">
-                    <img id="nav-my-avatar" src="" class="w-8 h-8 rounded-full object-cover ring-2 ring-purple-500/30">
+                <div class="flex items-center cursor-pointer" onclick="openProfile('me')">
+                    <img id="nav-my-avatar" src="" class="w-8 h-8 rounded-full object-cover" style="border: 2px solid rgba(147,51,234,0.4);">
                 </div>
             </div>
         </nav>
 
         <!-- GLAVNI GRID -->
-        <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 p-4 md:p-6">
+        <div class="main-grid flex-1">
             
             <!-- LIJEVI SIDEBAR -->
-            <aside class="hidden lg:block lg:col-span-3 space-y-6">
-                <div class="bg-[#0b0f1f]/60 backdrop-blur-md border border-slate-800/80 rounded-2xl p-4 sticky top-24">
-                    <div class="space-y-1">
-                        <a href="#" onclick="renderFeed()" class="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-purple-600/20 to-pink-600/5 text-purple-400 font-semibold rounded-xl border border-purple-500/20 transition group">
-                            <i data-lucide="layout-grid" class="w-5 h-5"></i>
-                            <span>Glavni Feed</span>
-                        </a>
-                        <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 font-medium rounded-xl transition group">
-                            <i data-lucide="beer" class="w-5 h-5"></i>
-                            <span>Pijanke u blizini</span>
-                        </a>
-                        <a href="#" onclick="openProfile('me')" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 font-medium rounded-xl transition group">
-                            <i data-lucide="user" class="w-5 h-5"></i>
-                            <span>Moj Profil</span>
-                        </a>
-                    </div>
+            <aside class="hidden lg-block col-sidebar-left">
+                <div class="bg-card rounded-2xl p-4 flex flex-col gap-4" style="position: sticky; top: 6rem;">
+                    <a href="#" onclick="renderFeed()" class="flex items-center gap-4 px-4 py-3 rounded-xl font-bold text-sm" style="background: rgba(147,51,234,0.15); color: #c084fc; border: 1px solid rgba(147,51,234,0.2);">Glavni Feed</a>
+                    <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-xl font-bold text-sm" style="color: #94a3b8;">Pijanke u blizini</a>
+                    <a href="#" onclick="openProfile('me')" class="flex items-center gap-4 px-4 py-3 rounded-xl font-bold text-sm" style="color: #94a3b8;">Moj Profil</a>
                 </div>
             </aside>
 
-            <!-- SREDINA (FEED) -->
-            <main class="col-span-1 lg:col-span-6 space-y-6">
+            <!-- FEED -->
+            <main class="col-feed flex flex-col gap-4">
                 
                 <!-- BOX ZA NOVU OBJAVU -->
-                <div class="bg-[#0b0f1f]/80 backdrop-blur-md border border-slate-800/80 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.3)] relative overflow-hidden">
+                <div class="bg-card rounded-3xl p-5 shadow-2xl">
                     <div class="flex gap-4">
-                        <img id="creator-my-avatar" src="" class="w-10 h-10 rounded-full object-cover border border-slate-700 cursor-pointer" onclick="openProfile('me')">
-                        <div class="flex-1 space-y-3">
-                            <textarea 
-                                id="post-textarea"
-                                placeholder="Gdje gori večeras? Kaži ekipi šta se pije, lokaciju, opis..." 
-                                class="w-full bg-[#121829]/60 border border-slate-800/80 rounded-2xl p-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 focus:bg-[#121829] transition resize-none h-24 text-sm leading-relaxed"
-                            ></textarea>
-                            
-                            <div id="image-preview-container" class="hidden relative inline-block rounded-xl overflow-hidden border border-slate-800 max-w-[150px]">
+                        <img id="creator-my-avatar" src="" class="w-10 h-10 rounded-full object-cover" onclick="openProfile('me')" style="cursor: pointer;">
+                        <div class="flex-1 flex flex-col gap-4">
+                            <textarea id="post-textarea" placeholder="Gdje gori večeras? Kaži ekipi šta se pije, lokaciju, opis..." class="w-full bg-input rounded-2xl p-4 text-sm" style="height: 90px; border: 1px solid #1e293b;"></textarea>
+                            <div id="image-preview-container" class="hidden relative rounded-xl overflow-hidden border" style="max-width: 150px; border-color: #1e293b;">
                                 <img id="image-preview" src="" class="w-full h-24 object-cover">
-                                <button onclick="removeSelectedImage()" class="absolute top-1 right-1 bg-black/70 text-pink-500 p-1 rounded-full hover:bg-black"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="removeSelectedImage()" class="absolute" style="top: 4px; right: 4px; background: rgba(0,0,0,0.7); padding: 4px; border-radius: 9999px; color: #ec4899;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-800/40">
-                        <div class="flex gap-2">
-                            <input type="file" id="file-input" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
-                            <button onclick="document.getElementById('file-input').click()" class="flex items-center gap-2 text-xs text-slate-400 hover:text-purple-400 transition bg-slate-800/30 hover:bg-purple-500/10 px-3 py-2 rounded-xl border border-slate-800 hover:border-purple-500/20 font-medium">
-                                <i data-lucide="image" class="w-4 h-4"></i>
-                                <span>Dodaj iz galerije</span>
-                            </button>
-                        </div>
-                        <button onclick="createNewPost()" class="bg-gradient-to-r from-purple-600 via-purple-500 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-purple-600/20 transition-all duration-300 uppercase tracking-wider">
-                            Objavi 🍻
+                    <div class="flex justify-between items-center mt-4 pt-4 border-t" style="border-color: rgba(255,255,255,0.05)">
+                        <input type="file" id="file-input" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+                        <button onclick="document.getElementById('file-input').click()" class="flex items-center gap-4 text-xs font-bold px-4 py-2 rounded-xl bg-input border" style="color: #94a3b8;">
+                            Dodaj sliku
                         </button>
+                        <button onclick="createNewPost()" class="btn-gradient font-bold text-xs px-5 py-2.5 rounded-xl uppercase">Objavi 🍻</button>
                     </div>
                 </div>
 
                 <!-- LIVE LISTA OBJAVA -->
-                <div id="feed-container" class="space-y-6"></div>
+                <div id="feed-container" class="flex flex-col gap-4"></div>
             </main>
 
             <!-- DESNI SIDEBAR -->
-            <aside class="hidden lg:block lg:col-span-3 space-y-6">
-                <div class="bg-[#0b0f1f]/60 backdrop-blur-md border border-slate-800/80 rounded-2xl p-4 sticky top-24">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2 px-2">
-                        <i data-lucide="zap" class="w-4 h-4 text-pink-500"></i> Aktivna ekipa
-                    </h3>
-                    <div class="space-y-2" id="users-sidebar"></div>
+            <aside class="hidden lg-block col-sidebar-right">
+                <div class="bg-card rounded-2xl p-4 flex flex-col gap-4" style="position: sticky; top: 6rem;">
+                    <h3 style="font-size: 11px; font-weight:700; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em;">Aktivna ekipa</h3>
+                    <div class="flex flex-col gap-4" id="users-sidebar"></div>
                 </div>
             </aside>
 
         </div>
     </div>
 
-    <!-- JAVASCRIPT KOJI POKREĆE SVE FUNKCIJE -->
+    <!-- SVI HANDLERI I LOGIKA -->
     <script>
         let currentSelectedImageBase64 = "";
-        let temporaryAvatarBase64 = ""; // Drži sliku tokom editovanja prije nego sačuvamo
+        let temporaryAvatarBase64 = "";
 
-        // --- BAZA PODATAKA KORISNIKA ---
         const usersDatabase = {
             'me': { id: 'me', name: 'DIFIT', handle: '@difit_music', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80', bio: 'FL Studio, trap, drill i hladan Heineken. 🎧🔥', followers: 240, following: 180, isMe: true },
             'u1': { id: 'u1', name: 'Sara', handle: '@sara_sa', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80', bio: 'Vikendi su rezervisani za klubove i dobru ekipu. 🍹', followers: 850, following: 430, isFollowing: false },
@@ -238,7 +238,6 @@
             'u4': { id: 'u4', name: 'Nikola K.', handle: '@nikola_k', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80', bio: 'U potrazi za najboljim šankom u državi.', followers: 450, following: 320, isFollowing: false }
         };
 
-        // --- BAZA OBJAVA ---
         let mockPosts = [
             {
                 id: 'p1',
@@ -258,110 +257,83 @@
             }
         ];
 
-        // Osvježavanje avatara na glavnom interfejsu koji zavise od tebe
         function syncStaticAvatars() {
             document.getElementById('nav-my-avatar').src = usersDatabase['me'].avatar;
             document.getElementById('creator-my-avatar').src = usersDatabase['me'].avatar;
         }
 
-        // --- RENDER FEED-A ---
         function renderFeed() {
             const container = document.getElementById('feed-container');
             container.innerHTML = '';
 
             mockPosts.forEach(post => {
                 const user = usersDatabase[post.userKey] || usersDatabase['me'];
-                
-                const imageHtml = post.image ? `
-                    <div class="rounded-2xl overflow-hidden border border-slate-800/80 max-h-[380px] mt-3">
-                        <img src="${post.image}" class="w-full h-full object-cover">
-                    </div>
-                ` : '';
-
-                const hostBadge = post.isHost ? `
-                    <span class="bg-purple-500/10 text-purple-400 text-[10px] font-bold px-2 py-0.5 rounded-md border border-purple-500/20">Domaćin</span>
-                ` : '';
-
-                const likeButtonClass = post.hasLiked ? 'text-pink-500 bg-pink-500/10 border-pink-500/30' : 'text-slate-400 bg-slate-800/20 border-slate-800/60';
-                const commentButtonClass = post.showComments ? 'text-purple-400 bg-purple-500/10 border-purple-500/30' : 'text-slate-400 bg-slate-800/20 border-slate-800/60';
+                const imageHtml = post.image ? `<div class="rounded-2xl overflow-hidden mt-3" style="max-height: 380px; border: 1px solid #1e293b;"><img src="${post.image}" class="w-full h-full object-cover"></div>` : '';
+                const hostBadge = post.isHost ? `<span style="background: rgba(147,51,234,0.15); color: #c084fc; font-size: 10px; font-weight:700; padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(147,51,234,0.2)">Domaćin</span>` : '';
+                const likeStyle = post.hasLiked ? 'color: #ec4899; background: rgba(236,72,153,0.1); border-color: rgba(236,72,153,0.3);' : 'color: #94a3b8; background: rgba(30,41,59,0.2); border-color: #1e293b;';
+                const commentStyle = post.showComments ? 'color: #a855f7; background: rgba(147,51,234,0.1); border-color: rgba(147,51,234,0.3);' : 'color: #94a3b8; background: rgba(30,41,59,0.2); border-color: #1e293b;';
 
                 let commentsHtml = '';
                 if (post.showComments) {
-                    commentsHtml = `
-                        <div class="mt-4 pt-4 border-t border-slate-800/60 space-y-3">
-                            <div class="flex gap-2.5 items-center">
-                                <img src="${usersDatabase['me'].avatar}" class="w-7 h-7 rounded-full object-cover">
-                                <input type="text" id="input-comment-${post.id}" placeholder="Napiši komentar..." class="flex-1 bg-[#121829] border border-slate-800/80 rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50">
-                                <button onclick="addComment('${post.id}')" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-[11px] px-3 py-1.5 rounded-xl transition">Pošalji</button>
-                            </div>
-                            <div class="space-y-2.5 pt-2 max-h-[250px] overflow-y-auto">
-                    `;
+                    commentsHtml = `<div class="mt-4 pt-4 border-t flex flex-col gap-4" style="border-color: #1e293b;">
+                        <div class="flex gap-4 items-center">
+                            <img src="${usersDatabase['me'].avatar}" class="w-7 h-7 rounded-full object-cover">
+                            <input type="text" id="input-comment-${post.id}" placeholder="Napiši komentar..." class="flex-1 bg-input rounded-xl px-3 py-1.5 text-xs" style="border: 1px solid #1e293b;">
+                            <button onclick="addComment('${post.id}')" class="btn-gradient font-bold px-3 py-1.5 rounded-xl" style="font-size: 11px;">Pošalji</button>
+                        </div><div class="flex flex-col gap-2" style="max-height: 250px; overflow-y: auto;">`;
 
                     if (post.comments.length === 0) {
-                        commentsHtml += `<p class="text-[11px] text-slate-500 italic px-1">Nema komentara. Budi prvi! 🥂</p>`;
+                        commentsHtml += `<p style="font-size: 11px; color: #64748b; font-style: italic;">Nema komentara. Budi prvi! 🥂</p>`;
                     } else {
                         post.comments.forEach(comment => {
                             const cUser = usersDatabase[comment.userKey] || usersDatabase['me'];
                             const isMyComment = comment.userKey === 'me';
-                            const cLikeClass = comment.hasLiked ? 'text-pink-500' : 'text-slate-500 hover:text-pink-400';
-                            const deleteBtnHtml = isMyComment ? `
-                                <button onclick="deleteComment('${post.id}', '${comment.id}')" class="text-slate-600 hover:text-pink-500 transition ml-2"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-                            ` : '';
+                            const cLikeColor = comment.hasLiked ? 'color: #ec4899;' : 'color: #64748b;';
+                            const deleteBtn = isMyComment ? `<button onclick="deleteComment('${post.id}', '${comment.id}')" style="color: #64748b; margin-left: 8px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>` : '';
 
-                            commentsHtml += `
-                                <div class="flex items-start gap-2.5 p-2 bg-[#121829]/40 rounded-xl border border-slate-800/20">
-                                    <img src="${cUser.avatar}" class="w-7 h-7 rounded-full object-cover cursor-pointer mt-0.5" onclick="openProfile('${cUser.id}')">
-                                    <div class="flex-1">
-                                        <div class="flex justify-between items-center">
-                                            <span class="font-bold text-[12px] text-slate-300 hover:text-purple-400 cursor-pointer" onclick="openProfile('${cUser.id}')">${cUser.name}</span>
-                                            <div class="flex items-center gap-1.5">
-                                                <button onclick="toggleLikeComment('${post.id}', '${comment.id}')" class="flex items-center gap-1 text-[10px] ${cLikeClass} font-medium transition">
-                                                    <i data-lucide="heart" class="w-3 h-3"></i><span>${comment.likesCount}</span>
-                                                </button>
-                                                ${deleteBtnHtml}
-                                            </div>
+                            commentsHtml += `<div class="flex items-start gap-4 p-2 rounded-xl" style="background: rgba(18,24,41,0.4); border: 1px solid rgba(30,41,59,0.2);">
+                                <img src="${cUser.avatar}" class="w-7 h-7 rounded-full object-cover" style="cursor:pointer;" onclick="openProfile('${cUser.id}')">
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-bold text-xs" style="color: #cbd5e1; cursor:pointer;" onclick="openProfile('${cUser.id}')">${cUser.name}</span>
+                                        <div class="flex items-center">
+                                            <button onclick="toggleLikeComment('${post.id}', '${comment.id}')" class="flex items-center gap-4 text-xs font-medium" style="${cLikeColor}">❤️ <span>${comment.likesCount}</span></button>
+                                            ${deleteBtn}
                                         </div>
-                                        <p class="text-xs text-slate-400 leading-relaxed mt-0.5">${comment.text}</p>
                                     </div>
+                                    <p class="text-xs mt-1" style="color: #94a3b8;">${comment.text}</p>
                                 </div>
-                            `;
+                            </div>`;
                         });
                     }
                     commentsHtml += `</div></div>`;
                 }
 
                 const postElement = document.createElement('article');
-                postElement.className = 'bg-[#0b0f1f]/80 backdrop-blur-md border border-slate-800/80 rounded-3xl p-5 shadow-[0_10px_25px_rgba(0,0,0,0.2)] hover:border-slate-700/60 transition-all duration-300';
+                postElement.className = 'bg-card rounded-3xl p-5 shadow-xl transition';
                 postElement.innerHTML = `
                     <div class="flex justify-between items-center mb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="relative cursor-pointer" onclick="openProfile('${post.userKey}')">
-                                <img src="${user.avatar}" class="w-11 h-11 rounded-full object-cover ring-2 ring-purple-500/20 hover:scale-105 transition">
-                            </div>
+                        <div class="flex items-center gap-4">
+                            <img src="${user.avatar}" class="w-11 h-11 rounded-full object-cover" style="cursor:pointer;" onclick="openProfile('${post.userKey}')">
                             <div>
-                                <div class="flex items-center gap-2">
-                                    <h4 onclick="openProfile('${post.userKey}')" class="font-bold text-sm text-slate-200 hover:text-purple-400 transition cursor-pointer">${user.name}</h4>
+                                <div class="flex items-center gap-4">
+                                    <h4 onclick="openProfile('${post.userKey}')" class="font-bold text-sm" style="cursor:pointer;">${user.name}</h4>
                                     ${hostBadge}
                                 </div>
-                                <p class="text-[11px] text-slate-500 font-medium">${post.timeAgo} ${post.location ? '• ' + post.location : ''}</p>
+                                <p style="font-size: 11px; color: #64748b; font-weight:500;">${post.timeAgo} ${post.location ? '• ' + post.location : ''}</p>
                             </div>
                         </div>
                     </div>
-                    <p class="text-slate-300 text-sm leading-relaxed">${post.text}</p>
+                    <p class="text-sm" style="color: #cbd5e1;">${post.text}</p>
                     ${imageHtml}
-                    <div class="flex items-center gap-4 mt-4 pt-3 border-t border-slate-800/40 text-slate-400">
-                        <button onclick="toggleLike('${post.id}')" class="flex items-center gap-2 hover:text-pink-500 transition-colors px-3 py-1.5 rounded-xl border text-xs font-semibold ${likeButtonClass}">
-                            <i data-lucide="heart" class="w-4 h-4"></i><span>${post.likesCount}</span>
-                        </button>
-                        <button onclick="toggleCommentsSection('${post.id}')" class="flex items-center gap-2 hover:text-purple-400 transition-colors px-3 py-1.5 rounded-xl border text-xs font-semibold ${commentButtonClass}">
-                            <i data-lucide="message-square" class="w-4 h-4"></i><span>Komentari (${post.comments.length})</span>
-                        </button>
+                    <div class="flex items-center gap-4 mt-4 pt-4 border-t" style="border-color: rgba(255,255,255,0.05);">
+                        <button onclick="toggleLike('${post.id}')" class="flex items-center gap-4 px-3 py-1.5 rounded-xl border text-xs font-bold" style="${likeStyle}">❤️ <span>${post.likesCount}</span></button>
+                        <button onclick="toggleCommentsSection('${post.id}')" class="flex items-center gap-4 px-3 py-1.5 rounded-xl border text-xs font-bold" style="${commentStyle}">💬 <span>Komentari (${post.comments.length})</span></button>
                     </div>
                     ${commentsHtml}
                 `;
                 container.appendChild(postElement);
             });
-            lucide.createIcons();
         }
 
         function renderSidebarUsers() {
@@ -371,18 +343,18 @@
                 const user = usersDatabase[key];
                 if (user.isMe) return;
                 const btnContent = user.isFollowing 
-                    ? `<button onclick="toggleFollow('${user.id}')" class="text-[10px] bg-slate-800 text-slate-400 px-3 py-1.5 rounded-lg font-bold border border-slate-700/50 transition">Pratiš</button>`
-                    : `<button onclick="toggleFollow('${user.id}')" class="text-[10px] bg-purple-600/10 text-purple-400 hover:bg-purple-600 hover:text-white border border-purple-500/20 px-3 py-1.5 rounded-lg font-bold transition">Prati</button>`;
+                    ? `<button onclick="toggleFollow('${user.id}')" class="text-xs px-3 py-1.5 rounded-lg font-bold" style="background: #1e293b; color: #94a3b8; border: 1px solid #334155;">Pratiš</button>`
+                    : `<button onclick="toggleFollow('${user.id}')" class="text-xs px-3 py-1.5 rounded-lg font-bold" style="background: rgba(147,51,234,0.1); color: #c084fc; border: 1px solid rgba(147,51,234,0.2);">Prati</button>`;
 
                 const userElement = document.createElement('div');
-                userElement.className = 'flex items-center justify-between p-2 hover:bg-slate-800/30 rounded-xl transition';
+                userElement.className = 'flex items-center justify-between p-2 rounded-xl';
                 userElement.innerHTML = `
-                    <div class="flex items-center gap-3 cursor-pointer" onclick="openProfile('${user.id}')">
-                        <div class="relative">
-                            <img src="${user.avatar}" class="w-9 h-9 rounded-full object-cover ring-2 ring-emerald-500/20">
-                            <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#0b0f1f] rounded-full"></div>
+                    <div class="flex items-center gap-4" style="cursor:pointer;" onclick="openProfile('${user.id}')">
+                        <div class="relative flex">
+                            <img src="${user.avatar}" class="w-9 h-9 rounded-full object-cover">
+                            <div class="absolute" style="bottom: 0; right: 0; width: 10px; height: 10px; background: #10b981; border: 2px solid #0b0f1f; border-radius: 9999px;"></div>
                         </div>
-                        <span class="font-semibold text-xs text-slate-300">${user.name}</span>
+                        <span class="font-bold text-xs" style="color: #cbd5e1;">${user.name}</span>
                     </div>
                     ${btnContent}
                 `;
@@ -390,25 +362,19 @@
             });
         }
 
-        // --- SISTEM UREĐIVANJA PROFILA (EDIT MODAL) ---
         function openEditProfileModal() {
             const me = usersDatabase['me'];
-            
-            // Popuni polja trenutnim podacima iz baze
             document.getElementById('edit-input-name').value = me.name;
             document.getElementById('edit-input-handle').value = me.handle;
             document.getElementById('edit-input-bio').value = me.bio;
             document.getElementById('edit-avatar-preview').src = me.avatar;
-            temporaryAvatarBase64 = me.avatar; // Početno stanje je stara slika
-
-            // Prikaži prozor za editovanje
+            temporaryAvatarBase64 = me.avatar;
             document.getElementById('edit-profile-modal').classList.remove('hidden');
-            lucide.createIcons();
         }
 
         function closeEditProfileModal() {
             document.getElementById('edit-profile-modal').classList.add('hidden');
-            document.getElementById('avatar-file-input').value = ""; // reset
+            document.getElementById('avatar-file-input').value = "";
         }
 
         function handleAvatarSelect(event) {
@@ -428,29 +394,25 @@
             const newHandle = document.getElementById('edit-input-handle').value.trim();
             const newBio = document.getElementById('edit-input-bio').value.trim();
 
-            if (!newName || !newHandle) {
-                alert("Ime i @handle ne smiju biti prazni!");
-                return;
-            }
+            if (!newName || !newHandle) { return; }
 
-            // Sređivanje baze podataka novim vrijednostima uživo
             usersDatabase['me'].name = newName;
             usersDatabase['me'].handle = newHandle.startsWith('@') ? newHandle : '@' + newHandle;
             usersDatabase['me'].bio = newBio;
             usersDatabase['me'].avatar = temporaryAvatarBase64;
 
-            // Zatvori prozor i ponovo otvori ažurirani obični profil da se vidi rezultat
             closeEditProfileModal();
             syncStaticAvatars();
             renderFeed();
             openProfile('me');
         }
 
-        // --- OSTALI HANDLERI (KOMENTARI, OBJAVE, LAJKOVI) ---
         function toggleCommentsSection(postId) {
             const post = mockPosts.find(p => p.id === postId);
             if (post) { post.showComments = !post.showComments; renderFeed(); }
         }
+
+         Albijuubbb
 
         function addComment(postId) {
             const inputElement = document.getElementById(`input-comment-${postId}`);
@@ -557,31 +519,30 @@
 
             const actionContainer = document.getElementById('modal-profile-action-container');
             if (user.isMe) {
-                // SADA OVO DUGME POKREĆE MODAL ZA UREĐIVANJE
-                actionContainer.innerHTML = `<button onclick="openEditProfileModal()" class="text-xs bg-[#1f293d] border border-slate-700 text-slate-200 px-4 py-2 rounded-xl font-bold hover:bg-slate-700 transition">Uredi profil</button>`;
+                actionContainer.innerHTML = `<button onclick="openEditProfileModal()" class="text-xs px-4 py-2 rounded-xl font-bold border" style="background: #1f293d; border-color: #334155; color: #cbd5e1;">Uredi profil</button>`;
             } else {
                 if (user.isFollowing) {
-                    actionContainer.innerHTML = `<button onclick="toggleFollow('${user.id}'); openProfile('${user.id}')" class="text-xs bg-slate-800 text-slate-400 px-4 py-2 rounded-xl font-bold border border-slate-700/50 transition">Pratiš</button>`;
+                    actionContainer.innerHTML = `<button onclick="toggleFollow('${user.id}'); openProfile('${user.id}')" class="text-xs bg-input px-4 py-2 rounded-xl font-bold border" style="color: #94a3b8;">Pratiš</button>`;
                 } else {
-                    actionContainer.innerHTML = `<button onclick="toggleFollow('${user.id}'); openProfile('${user.id}')" class="text-xs bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-xl font-bold transition shadow-md">Prati</button>`;
+                    actionContainer.innerHTML = `<button onclick="toggleFollow('${user.id}'); openProfile('${user.id}')" class="text-xs px-4 py-2 rounded-xl font-bold btn-gradient">Prati</button>`;
                 }
             }
 
             const listContainer = document.getElementById('modal-profile-posts-list');
             listContainer.innerHTML = '';
             if (userPosts.length === 0) {
-                listContainer.innerHTML = `<p class="text-xs text-slate-500 italic p-2">Korisnik još nema objavljenih pijanki.</p>`;
+                listContainer.innerHTML = `<p style="font-size: 12px; color: #64748b; font-style: italic; padding: 0.5rem;">Korisnik još nema objavljenih pijanki.</p>`;
             } else {
                 userPosts.forEach(post => {
                     const item = document.createElement('div');
-                    item.className = 'p-2.5 bg-[#121829]/40 border border-slate-800/40 rounded-xl text-xs text-slate-300';
-                    item.innerHTML = `<div class="flex justify-between text-[10px] text-slate-500 mb-1 font-medium"><span>${post.timeAgo}</span><span class="text-purple-400">${post.location || ''}</span></div><p class="line-clamp-2">${post.text}</p>`;
+                    item.className = 'p-4 bg-input rounded-xl text-xs';
+                    item.style.borderColor = 'rgba(255,255,255,0.02)';
+                    item.innerHTML = `<div class="flex justify-between" style="font-size: 10px; color:#64748b; margin-bottom: 4px;"><span>${post.timeAgo}</span><span style="color:#a855f7;">${post.location || ''}</span></div><p>${post.text}</p>`;
                     listContainer.appendChild(item);
                 });
             }
 
             document.getElementById('profile-modal').classList.remove('hidden');
-            lucide.createIcons();
         }
 
         function closeProfileModal() { document.getElementById('profile-modal').classList.add('hidden'); }
@@ -598,7 +559,6 @@
             renderFeed();
             renderSidebarUsers();
             simulateOnlineUsers();
-            lucide.createIcons();
         };
     </script>
 </body>
