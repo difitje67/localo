@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOCALO | Gdje gori večeras?</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Stabilna verzija Lucide ikona -->
     <script src="https://unpkg.com/lucide@0.354.0/dist/umd/lucide.min.js"></script>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;600;700;800&family=Inter:wght=400;500;600&display=swap" rel="stylesheet">
-    <!-- Supabase JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -26,11 +22,9 @@
 </head>
 <body class="bg-[#060813] text-slate-200 antialiased min-h-screen selection:bg-purple-500 selection:text-white">
 
-    <!-- POZADINSKI NEON GLOW -->
     <div class="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-900/10 blur-[120px] pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-pink-900/10 blur-[120px] pointer-events-none z-0"></div>
 
-    <!-- SCREEN ZA LOGIN / REGISTRACIJU -->
     <div id="auth-screen" class="fixed inset-0 bg-[#060813] z-[200] flex items-center justify-center p-4 hidden">
         <div class="bg-[#0b0f1f]/90 backdrop-blur-md border border-slate-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative z-10">
             <div class="text-center mb-8">
@@ -41,7 +35,6 @@
                 <p class="text-xs text-slate-400 mt-1" id="auth-subtitle">Gdje gori večeras? Prijavi se i saznaj.</p>
             </div>
 
-            <!-- Login Forma -->
             <div class="space-y-4" id="login-form">
                 <div>
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Email adresa</label>
@@ -55,7 +48,6 @@
                 <p class="text-center text-xs text-slate-400 mt-4">Nemaš račun? <span onclick="toggleAuthForms(true)" class="text-purple-400 font-bold cursor-pointer hover:underline">Registriraj se</span></p>
             </div>
 
-            <!-- Register Forma -->
             <div class="space-y-4 hidden" id="register-form">
                 <div>
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Ime / Naziv profila</label>
@@ -79,7 +71,6 @@
         </div>
     </div>
 
-    <!-- MODAL ZA PREGLED PROFILA -->
     <div id="profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
         <div class="bg-[#0b0f1f] border border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative">
             <button onclick="closeProfileModal()" class="absolute top-4 right-4 z-50 bg-black/40 hover:bg-black/70 text-slate-200 p-2 rounded-full border border-slate-700/50 transition">
@@ -95,18 +86,75 @@
                         <h2 id="modal-profile-name" class="text-xl font-extrabold text-slate-100"></h2>
                         <p id="modal-profile-handle" class="text-xs text-purple-400 font-medium mt-0.5"></p>
                     </div>
+                    <div id="modal-profile-action-container"></div>
                 </div>
                 <p class="text-sm text-slate-300 mt-4 italic" id="modal-profile-bio"></p>
+                <div class="grid grid-cols-1 gap-4 mt-6 p-3 bg-[#121829]/60 border border-slate-800/60 rounded-xl text-center">
+                    <div>
+                        <p id="modal-profile-posts-count" class="text-base font-bold text-slate-100">0</p>
+                        <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Objave u bazi</p>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
+                        <i data-lucide="wine" class="w-3.5 h-3.5 text-pink-500"></i> Sve objave korisnika
+                    </h4>
+                    <div id="modal-profile-posts-list" class="space-y-2.5 max-h-[180px] overflow-y-auto pr-1"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- GLAVNI KONTEJNER -->
+    <div id="edit-profile-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[110] hidden flex items-center justify-center p-4">
+        <div class="bg-[#0b0f1f] border border-slate-800 rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative p-6 space-y-5">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+                    <i data-lucide="user-cog" class="w-5 h-5 text-purple-500"></i> Uredi svoj profil
+                </h3>
+                <button onclick="closeEditProfileModal()" class="text-slate-400 hover:text-white transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="flex items-center gap-4 bg-[#121829]/40 p-3 rounded-2xl border border-slate-800/60">
+                <div class="relative">
+                    <img id="edit-avatar-preview" src="" class="w-16 h-16 rounded-xl object-cover ring-2 ring-purple-500/40">
+                </div>
+                <div class="flex-1">
+                    <p class="text-xs font-semibold text-slate-300">Profilna fotografija</p>
+                    <input type="file" id="avatar-file-input" accept="image/*" class="hidden" onchange="handleAvatarSelect(event)">
+                    <button onclick="document.getElementById('avatar-file-input').click()" class="mt-1.5 flex items-center gap-1.5 bg-purple-600/10 hover:bg-purple-600 text-purple-400 hover:text-white border border-purple-500/20 text-[11px] font-bold px-2.5 py-1.5 rounded-lg transition">
+                        <i data-lucide="upload" class="w-3.5 h-3.5"></i> Izaberi sa uređaja
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-3.5">
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Ime / Naziv profila</label>
+                    <input type="text" id="edit-input-name" class="w-full bg-[#121829] border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-purple-500">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Korisničko ime (@handle)</label>
+                    <input type="text" id="edit-input-handle" class="w-full bg-[#121829] border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-purple-500">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Biografija (Opis)</label>
+                    <textarea id="edit-input-bio" class="w-full bg-[#121829] border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-purple-500 h-20 resize-none"></textarea>
+                </div>
+            </div>
+
+            <div class="flex gap-3 pt-2 border-t border-slate-800/60">
+                <button onclick="closeEditProfileModal()" class="flex-1 bg-slate-800 text-slate-400 font-bold text-xs py-2.5 rounded-xl border border-slate-700/50 hover:bg-slate-700 transition">Odustani</button>
+                <button onclick="saveProfileChanges()" class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs py-2.5 rounded-xl shadow-lg shadow-purple-600/20 transition">Spremi promjene</button>
+            </div>
+        </div>
+    </div>
+
     <div class="relative z-10 max-w-[1400px] mx-auto min-h-screen flex flex-col">
 
-        <!-- NAVIGACIJA -->
         <nav class="sticky top-0 z-50 backdrop-blur-xl bg-[#060813]/70 border-b border-slate-800/60 px-4 md:px-8 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3" onclick="fetchPostsFromDatabase()">
+            <div class="flex items-center gap-3" onclick="fetchPosts()">
                 <div class="p-2 bg-gradient-to-tr from-purple-600 to-pink-600 rounded-xl shadow-lg shadow-purple-500/20">
                     <i data-lucide="map-pin" class="w-5 h-5 text-white animate-pulse"></i>
                 </div>
@@ -116,7 +164,7 @@
             </div>
             
             <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2.5 bg-emerald-500/10 border border-emerald-500/20 px-3.5 py-1.5 rounded-full">
+                <div class="flex items-center gap-2.5 bg-emerald-500/10 border border-emerald-500/20 px-3.5 py-1.5 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.05)]">
                     <span class="relative flex h-2 w-2">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -124,8 +172,8 @@
                     <span class="text-xs font-bold text-emerald-400 tracking-wide uppercase"><span id="online-count">134</span> na mreži</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2 pl-2 cursor-pointer" onclick="if(currentUser) openProfile(currentUser.id)">
-                        <img id="nav-my-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80" class="w-8 h-8 rounded-full object-cover ring-2 ring-purple-500/30">
+                    <div class="flex items-center gap-2 pl-2 border-l border-slate-800 cursor-pointer" onclick="openProfile(currentUser.id)">
+                        <img id="nav-my-avatar" src="" class="w-8 h-8 rounded-full object-cover ring-2 ring-purple-500/30">
                     </div>
                     <button onclick="handleLogout()" class="text-slate-500 hover:text-pink-500 transition-colors p-1" title="Odjavi se">
                         <i data-lucide="log-out" class="w-4 h-4"></i>
@@ -134,14 +182,12 @@
             </div>
         </nav>
 
-        <!-- GLAVNI GRID -->
         <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 p-4 md:p-6">
             
-            <!-- LIJEVI SIDEBAR -->
             <aside class="hidden lg:block lg:col-span-3 space-y-6">
                 <div class="bg-[#0b0f1f]/60 backdrop-blur-md border border-slate-800/80 rounded-2xl p-4 sticky top-24">
                     <div class="space-y-1">
-                        <button onclick="fetchPostsFromDatabase()" class="w-full flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-purple-600/20 to-pink-600/5 text-purple-400 font-semibold rounded-xl border border-purple-500/20 transition">
+                        <button onclick="fetchPosts()" class="w-full flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-purple-600/20 to-pink-600/5 text-purple-400 font-semibold rounded-xl border border-purple-500/20 transition">
                             <i data-lucide="layout-grid" class="w-5 h-5"></i>
                             <span>Glavni Feed</span>
                         </button>
@@ -149,7 +195,7 @@
                             <i data-lucide="beer" class="w-5 h-5"></i>
                             <span>Pijanke u blizini</span>
                         </button>
-                        <button onclick="if(currentUser) openProfile(currentUser.id)" class="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 font-medium rounded-xl transition">
+                        <button onclick="openProfile(currentUser.id)" class="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 font-medium rounded-xl transition">
                             <i data-lucide="user" class="w-5 h-5"></i>
                             <span>Moj Profil</span>
                         </button>
@@ -157,23 +203,21 @@
                 </div>
             </aside>
 
-            <!-- SREDINA (FEED) -->
             <main class="col-span-1 lg:col-span-6 space-y-6">
                 
-                <!-- BOX ZA NOVU OBJAVU -->
-                <div class="bg-[#0b0f1f]/80 backdrop-blur-md border border-slate-800/80 rounded-3xl p-5 shadow-2xl">
+                <div class="bg-[#0b0f1f]/80 backdrop-blur-md border border-slate-800/80 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.3)] relative overflow-hidden">
                     <div class="flex gap-4">
-                        <img id="creator-my-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80" class="w-10 h-10 rounded-full object-cover border border-slate-700 cursor-pointer" onclick="if(currentUser) openProfile(currentUser.id)">
+                        <img id="creator-my-avatar" src="" class="w-10 h-10 rounded-full object-cover border border-slate-700 cursor-pointer" onclick="openProfile(currentUser.id)">
                         <div class="flex-1 space-y-3">
                             <textarea 
                                 id="post-textarea"
                                 placeholder="Gdje gori večeras? Kaži ekipi šta se pije, lokaciju, opis..." 
-                                class="w-full bg-[#121829]/60 border border-slate-800/80 rounded-2xl p-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 focus:bg-[#121829] transition resize-none h-24 text-sm"
+                                class="w-full bg-[#121829]/60 border border-slate-800/80 rounded-2xl p-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 focus:bg-[#121829] transition resize-none h-24 text-sm leading-relaxed"
                             ></textarea>
                             
                             <div id="image-preview-container" class="hidden relative inline-block rounded-xl overflow-hidden border border-slate-800 max-w-[150px]">
                                 <img id="image-preview" src="" class="w-full h-24 object-cover">
-                                <button onclick="removeSelectedImage()" class="absolute top-1 right-1 bg-black/70 text-pink-500 p-1 rounded-full"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="removeSelectedImage()" class="absolute top-1 right-1 bg-black/70 text-pink-500 p-1 rounded-full hover:bg-black"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
                             </div>
                         </div>
                     </div>
@@ -181,22 +225,20 @@
                     <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-800/40">
                         <div class="flex gap-2">
                             <input type="file" id="file-input" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
-                            <button onclick="document.getElementById('file-input').click()" class="flex items-center gap-2 text-xs text-slate-400 hover:text-purple-400 transition bg-slate-800/30 hover:bg-purple-500/10 px-3 py-2 rounded-xl border border-slate-800 font-medium">
+                            <button onclick="document.getElementById('file-input').click()" class="flex items-center gap-2 text-xs text-slate-400 hover:text-purple-400 transition bg-slate-800/30 hover:bg-purple-500/10 px-3 py-2 rounded-xl border border-slate-800 hover:border-purple-500/20 font-medium">
                                 <i data-lucide="image" class="w-4 h-4"></i>
                                 <span>Dodaj iz galerije</span>
                             </button>
                         </div>
-                        <button onclick="createNewPost()" class="bg-gradient-to-r from-purple-600 via-purple-500 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition-all uppercase tracking-wider">
+                        <button onclick="createNewPost()" class="bg-gradient-to-r from-purple-600 via-purple-500 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-purple-600/20 transition-all duration-300 uppercase tracking-wider">
                             Objavi 🍻
                         </button>
                     </div>
                 </div>
 
-                <!-- LIVE LISTA OBJAVA -->
                 <div id="feed-container" class="space-y-6"></div>
             </main>
 
-            <!-- DESNI SIDEBAR -->
             <aside class="hidden lg:block lg:col-span-3 space-y-6">
                 <div class="bg-[#0b0f1f]/60 backdrop-blur-md border border-slate-800/80 rounded-2xl p-4 sticky top-24">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2 px-2">
@@ -209,7 +251,6 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT UKLAGOĐEN TVOJOJ BAZI -->
     <script>
         const SUPABASE_URL = "https://xqhhggavmyfirahywaey.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxaGhnZ2F2bXlmaXJhaHl3YWV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDkwMTIsImV4cCI6MjA5NTI4NTAxMn0.9813EFZQSuZqEM6kvJcBiXjoVJGjuluDa2FQ8phQXz8";
@@ -218,9 +259,10 @@
 
         let currentUser = null;
         let currentProfile = null;
-        let livePosts = [];
         let allProfiles = {};
+        let livePosts = [];
         let currentSelectedImageBase64 = "";
+        let temporaryAvatarBase64 = "";
 
         function toggleAuthForms(showRegister) {
             if (showRegister) {
@@ -238,10 +280,7 @@
             const fullName = document.getElementById('reg-name').value.trim();
             const username = document.getElementById('reg-handle').value.trim().replace('@', '');
 
-            if (!email || !password || !fullName || !username) {
-                alert("Sva polja su obavezna!");
-                return;
-            }
+            if (!email || !password || !fullName || !username) { alert("Sva polja su obavezna!"); return; }
 
             const { data, error } = await supabase.auth.signUp({ email, password });
             if (error) { alert("Greška prigodom registracije: " + error.message); return; }
@@ -252,12 +291,8 @@
                     .from('profiles')
                     .insert([{ id: data.user.id, full_name: fullName, username: username, avatar_url: defaultAvatar, bio: 'Novi član ekipe! 🍻' }]);
                 
-                if (pErr) { 
-                    alert("Greška s profilom: " + pErr.message); 
-                } else { 
-                    alert("Profil uspješno napravljen! Sad se prijavi."); 
-                    toggleAuthForms(false); 
-                }
+                if (pErr) { alert("Greška s profilom: " + pErr.message); } 
+                else { alert("Profil napravljen! Sad se prijavi."); toggleAuthForms(false); }
             }
         }
 
@@ -277,55 +312,40 @@
         }
 
         async function checkUserSession() {
-            try {
-                const { data: { session } } = await supabase.auth.getSession();
-                if (session) {
-                    currentUser = session.user;
-                    
-                    const { data: profile, error } = await supabase
-                        .from('profiles')
-                        .select('*')
-                        .eq('id', currentUser.id)
-                        .maybeSingle();
-                        
-                    if (!profile) {
-                        // Kreiramo privremeni profil ako se dogodi sinkronizacijski problem
-                        currentProfile = { id: currentUser.id, full_name: 'Localo Član', username: 'korisnik', avatar_url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80', bio: 'Tu sam! 🎧' };
-                    } else {
-                        currentProfile = profile;
-                    }
-                    
-                    document.getElementById('auth-screen').classList.add('hidden');
-                    document.getElementById('nav-my-avatar').src = currentProfile.avatar_url;
-                    document.getElementById('creator-my-avatar').src = currentProfile.avatar_url;
-                    
-                    await fetchAllProfiles();
-                    fetchPostsFromDatabase();
-                } else {
-                    document.getElementById('auth-screen').classList.remove('hidden');
-                }
-            } catch (err) {
-                console.error(err);
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                currentUser = session.user;
+                
+                const { data: profile } = await supabase.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+                currentProfile = profile || { id: currentUser.id, full_name: 'Localo Član', username: 'korisnik', avatar_url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80', bio: 'Tu sam! 🎧' };
+                
+                document.getElementById('auth-screen').classList.add('hidden');
+                syncStaticAvatars();
+                await fetchAllProfiles();
+                fetchPosts();
+            } else {
+                document.getElementById('auth-screen').classList.remove('hidden');
+            }
+        }
+
+        function syncStaticAvatars() {
+            if (currentProfile) {
+                document.getElementById('nav-my-avatar').src = currentProfile.avatar_url;
+                document.getElementById('creator-my-avatar').src = currentProfile.avatar_url;
             }
         }
 
         async function fetchAllProfiles() {
-            try {
-                const { data } = await supabase.from('profiles').select('*');
-                allProfiles = {};
-                if (data && data.length > 0) {
-                    data.forEach(p => { allProfiles[p.id] = p; });
-                } else {
-                    allProfiles[currentUser.id] = currentProfile;
-                }
-                renderSidebarUsers();
-            } catch(e) {
-                allProfiles[currentUser.id] = currentProfile;
-                renderSidebarUsers();
+            const { data } = await supabase.from('profiles').select('*');
+            allProfiles = {};
+            if (data) {
+                data.forEach(p => { allProfiles[p.id] = p; });
             }
+            allProfiles[currentUser.id] = currentProfile;
+            renderSidebarUsers();
         }
 
-        async function fetchPostsFromDatabase() {
+        async function fetchPosts() {
             const container = document.getElementById('feed-container');
             try {
                 const { data, error } = await supabase
@@ -334,17 +354,10 @@
                     .order('created_at', { ascending: false });
 
                 if (error) throw error;
-
                 livePosts = data || [];
-                
-                livePosts.forEach(post => {
-                    post.profiles = allProfiles[post.user_id] || { full_name: 'Član ekipe', username: 'korisnik', avatar_url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80' };
-                });
-
                 renderLiveFeed();
-            } catch (error) {
-                console.error("Greška s bazom:", error);
-                container.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Greška kod dohvaćanja objava.</p>`;
+            } catch (e) {
+                container.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Greška kod dohvaćanja feeda.</p>`;
             }
         }
 
@@ -355,9 +368,9 @@
                 return;
             }
             container.innerHTML = '';
-            
+
             livePosts.forEach(post => {
-                const author = post.profiles;
+                const author = allProfiles[post.user_id] || { full_name: 'Član ekipe', username: 'korisnik', avatar_url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80' };
                 const imageHtml = post.image_url ? `<div class="rounded-2xl overflow-hidden border border-slate-800/80 max-h-[380px] mt-3"><img src="${post.image_url}" class="w-full h-full object-cover"></div>` : '';
                 const isMyPost = post.user_id === currentUser.id;
                 const deleteBtn = isMyPost ? `<button onclick="deletePost('${post.id}')" class="text-slate-600 hover:text-pink-500 transition p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : '';
@@ -370,7 +383,7 @@
                             <img src="${author.avatar_url}" class="w-11 h-11 rounded-full object-cover cursor-pointer" onclick="openProfile('${post.user_id}')">
                             <div>
                                 <h4 class="font-bold text-sm text-slate-200 cursor-pointer" onclick="openProfile('${post.user_id}')">${author.full_name} <span class="text-xs text-slate-500">@${author.username}</span></h4>
-                                <p class="text-[11px] text-slate-500">Lokacija: ${post.location || 'Lokalno'}</p>
+                                <p class="text-[11px] text-slate-500">Lokacija: ${post.location || 'Široki Brijeg'}</p>
                             </div>
                         </div>
                         ${deleteBtn}
@@ -386,12 +399,12 @@
         function renderSidebarUsers() {
             const container = document.getElementById('users-sidebar');
             container.innerHTML = '';
-            
-            let hasUsers = false;
+            let count = 0;
+
             Object.keys(allProfiles).forEach(key => {
                 const u = allProfiles[key];
-                if (currentUser && u.id === currentUser.id) return;
-                hasUsers = true;
+                if (u.id === currentUser.id) return;
+                count++;
 
                 const userElement = document.createElement('div');
                 userElement.className = 'flex items-center justify-between p-2 hover:bg-slate-800/30 rounded-xl transition';
@@ -407,10 +420,9 @@
                 container.appendChild(userElement);
             });
 
-            if(!hasUsers) {
-                container.innerHTML = `<p class="text-[11px] text-slate-600 italic p-2">Nema drugih aktivnih članova.</p>`;
+            if (count === 0) {
+                container.innerHTML = `<p class="text-[11px] text-slate-600 italic p-2">Nema drugih članova na mreži.</p>`;
             }
-            lucide.createIcons();
         }
 
         async function createNewPost() {
@@ -418,33 +430,67 @@
             const text = textarea.value.trim();
             if (!text && !currentSelectedImageBase64) return;
 
-            try {
-                // Lokaciju stavljamo fiksno ili povlačimo ručno, id se generira automatski kao UUID na bazi
-                const { error } = await supabase
-                    .from('posts')
-                    .insert([{
-                        user_id: currentUser.id,
-                        text: text,
-                        location: 'Široki Brijeg',
-                        image_url: currentSelectedImageBase64 || null
-                    }]);
+            const { error } = await supabase.from('posts').insert([{
+                user_id: currentUser.id,
+                text: text,
+                location: 'Široki Brijeg',
+                image_url: currentSelectedImageBase64 || null
+            }]);
 
-                if (error) throw error;
-                textarea.value = '';
-                removeSelectedImage();
-                fetchPostsFromDatabase();
-            } catch(e) {
-                alert("Greška prigodom objave: " + e.message);
-            }
+            if (error) { alert("Greška kod objave: " + error.message); } 
+            else { textarea.value = ''; removeSelectedImage(); fetchPosts(); }
         }
 
         async function deletePost(postId) {
-            if (!confirm("Želiš li obrisati ovu objavu?")) return;
+            if (!confirm("Obrisati ovu objavu?")) return;
             const { error } = await supabase.from('posts').delete().eq('id', postId);
-            if (error) {
-                alert("Greška kod brisanja: " + error.message);
-            } else {
-                fetchPostsFromDatabase();
+            if (error) { alert(error.message); } else { fetchPosts(); }
+        }
+
+        function openEditProfileModal() {
+            document.getElementById('edit-input-name').value = currentProfile.full_name;
+            document.getElementById('edit-input-handle').value = currentProfile.username;
+            document.getElementById('edit-input-bio').value = currentProfile.bio || '';
+            document.getElementById('edit-avatar-preview').src = currentProfile.avatar_url;
+            temporaryAvatarBase64 = currentProfile.avatar_url;
+
+            document.getElementById('edit-profile-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeEditProfileModal() { document.getElementById('edit-profile-modal').classList.add('hidden'); }
+
+        function handleAvatarSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    temporaryAvatarBase64 = e.target.result;
+                    document.getElementById('edit-avatar-preview').src = temporaryAvatarBase64;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function saveProfileChanges() {
+            const newName = document.getElementById('edit-input-name').value.trim();
+            const newHandle = document.getElementById('edit-input-handle').value.trim().replace('@', '');
+            const newBio = document.getElementById('edit-input-bio').value.trim();
+
+            if (!newName || !newHandle) { alert("Sva polja su obavezna!"); return; }
+
+            const { error } = await supabase.from('profiles').update({
+                full_name: newName,
+                username: newHandle,
+                bio: newBio,
+                avatar_url: temporaryAvatarBase64
+            }).eq('id', currentUser.id);
+
+            if (error) { alert("Greška: " + error.message); } 
+            else {
+                closeEditProfileModal();
+                closeProfileModal();
+                location.reload();
             }
         }
 
@@ -456,7 +502,30 @@
             document.getElementById('modal-profile-handle').innerText = '@' + user.username;
             document.getElementById('modal-profile-avatar').src = user.avatar_url;
             document.getElementById('modal-profile-bio').innerText = user.bio || '"Nema opisa."';
-            
+
+            const userPosts = livePosts.filter(p => p.user_id === userId);
+            document.getElementById('modal-profile-posts-count').innerText = userPosts.length;
+
+            const actionContainer = document.getElementById('modal-profile-action-container');
+            if (userId === currentUser.id) {
+                actionContainer.innerHTML = `<button onclick="openEditProfileModal()" class="text-xs bg-[#1f293d] border border-slate-700 text-slate-200 px-4 py-2 rounded-xl font-bold hover:bg-slate-700 transition">Uredi profil</button>`;
+            } else {
+                actionContainer.innerHTML = '';
+            }
+
+            const listContainer = document.getElementById('modal-profile-posts-list');
+            listContainer.innerHTML = '';
+            if (userPosts.length === 0) {
+                listContainer.innerHTML = `<p class="text-xs text-slate-500 italic p-2">Korisnik nema objava.</p>`;
+            } else {
+                userPosts.forEach(post => {
+                    const item = document.createElement('div');
+                    item.className = 'p-2.5 bg-[#121829]/40 border border-slate-800/40 rounded-xl text-xs text-slate-300';
+                    item.innerHTML = `<p class="line-clamp-3">${post.text}</p>`;
+                    listContainer.appendChild(item);
+                });
+            }
+
             document.getElementById('profile-modal').classList.remove('hidden');
             lucide.createIcons();
         }
@@ -479,15 +548,15 @@
         function removeSelectedImage() {
             currentSelectedImageBase64 = "";
             document.getElementById('image-preview-container').classList.add('hidden');
+            document.getElementById('file-input').value = "";
         }
 
         window.onload = function() {
             checkUserSession();
             setInterval(() => {
-                const el = document.getElementById('online-count');
-                if(el) el.innerText = Math.floor(Math.random() * (150 - 110 + 1)) + 110;
+                const countElement = document.getElementById('online-count');
+                if (countElement) countElement.innerText = Math.floor(Math.random() * (150 - 110 + 1)) + 110;
             }, 5000);
-            setTimeout(() => { lucide.createIcons(); }, 800);
         };
     </script>
 </body>
