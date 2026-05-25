@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOCALO | Gdje gori večeras?</title>
-    <!-- Službeni Tailwind Play CDN koji radi brže i stabilnije -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Google Fonts -->
@@ -294,7 +294,7 @@
                                 <input type="text" id="input-comment-${post.id}" placeholder="Napiši komentar..." class="flex-1 bg-[#121829] border border-slate-800/80 rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50">
                                 <button onclick="addComment('${post.id}')" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-[11px] px-3 py-1.5 rounded-xl transition">Pošalji</button>
                             </div>
-                            <div class="space-y-2.5 pt-2 max-h-[250px] overflow-y-auto pr-1">
+                            <div class="space-y-2.5 pt-2 max-h-[250px] overflow-y-auto">
                     `;
 
                     if (post.comments.length === 0) {
@@ -541,7 +541,6 @@
             }
         }
 
-        // Otvaranje profila radi ispravno sa kompletnim klasama
         function openProfile(userKey) {
             const user = usersDatabase[userKey];
             if (!user) return;
@@ -558,6 +557,7 @@
 
             const actionContainer = document.getElementById('modal-profile-action-container');
             if (user.isMe) {
+                // SADA OVO DUGME POKREĆE MODAL ZA UREĐIVANJE
                 actionContainer.innerHTML = `<button onclick="openEditProfileModal()" class="text-xs bg-[#1f293d] border border-slate-700 text-slate-200 px-4 py-2 rounded-xl font-bold hover:bg-slate-700 transition">Uredi profil</button>`;
             } else {
                 if (user.isFollowing) {
