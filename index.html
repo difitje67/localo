@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOCALO | Gdje gori večeras?</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@0.354.0/dist/umd/lucide.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;600;700;800&family=Inter:wght=400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -22,55 +24,11 @@
 </head>
 <body class="bg-[#060813] text-slate-200 antialiased min-h-screen selection:bg-purple-500 selection:text-white">
 
+    <!-- POZADINSKI NEON GLOW -->
     <div class="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-900/10 blur-[120px] pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-pink-900/10 blur-[120px] pointer-events-none z-0"></div>
 
-    <div id="auth-screen" class="fixed inset-0 bg-[#060813] z-[200] flex items-center justify-center p-4 hidden">
-        <div class="bg-[#0b0f1f]/90 backdrop-blur-md border border-slate-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative z-10">
-            <div class="text-center mb-8">
-                <div class="inline-flex p-3 bg-gradient-to-tr from-purple-600 to-pink-600 rounded-2xl shadow-lg shadow-purple-500/20 mb-3">
-                    <i data-lucide="map-pin" class="w-6 h-6 text-white"></i>
-                </div>
-                <h2 class="text-3xl font-black tracking-tight bg-gradient-to-r from-white to-purple-400 bg-clip-text text-transparent">LOCALO<span class="text-pink-500">.</span></h2>
-                <p class="text-xs text-slate-400 mt-1" id="auth-subtitle">Gdje gori večeras? Prijavi se i saznaj.</p>
-            </div>
-
-            <div class="space-y-4" id="login-form">
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Email adresa</label>
-                    <input type="email" id="login-email" class="w-full bg-[#121829] border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-purple-500" placeholder="tvoj@email.com">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Lozinka</label>
-                    <input type="password" id="login-password" class="w-full bg-[#121829] border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-purple-500" placeholder="••••••••">
-                </div>
-                <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm py-3 rounded-xl shadow-lg shadow-purple-600/20 transition mt-2">Prijavi se 🚀</button>
-                <p class="text-center text-xs text-slate-400 mt-4">Nemaš račun? <span onclick="toggleAuthForms(true)" class="text-purple-400 font-bold cursor-pointer hover:underline">Registriraj se</span></p>
-            </div>
-
-            <div class="space-y-4 hidden" id="register-form">
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Ime / Naziv profila</label>
-                    <input type="text" id="reg-name" class="w-full bg-[#121829] border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-purple-500" placeholder="npr. Ivan">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Korisničko ime (@handle)</label>
-                    <input type="text" id="reg-handle" class="w-full bg-[#121829] border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-purple-500" placeholder="npr. ivan_12">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Email adresa</label>
-                    <input type="email" id="reg-email" class="w-full bg-[#121829] border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-purple-500" placeholder="tvoj@email.com">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Lozinka</label>
-                    <input type="password" id="reg-password" class="w-full bg-[#121829] border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-purple-500" placeholder="Minimum 6 znakova">
-                </div>
-                <button onclick="handleRegister()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm py-3 rounded-xl shadow-lg shadow-purple-600/20 transition mt-2">Kreiraj račun 🎉</button>
-                <p class="text-center text-xs text-slate-400 mt-4">Već imaš račun? <span onclick="toggleAuthForms(false)" class="text-purple-400 font-bold cursor-pointer hover:underline">Prijavi se</span></p>
-            </div>
-        </div>
-    </div>
-
+    <!-- MODAL ZA PREGLED PROFILA -->
     <div id="profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
         <div class="bg-[#0b0f1f] border border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative">
             <button onclick="closeProfileModal()" class="absolute top-4 right-4 z-50 bg-black/40 hover:bg-black/70 text-slate-200 p-2 rounded-full border border-slate-700/50 transition">
@@ -89,15 +47,23 @@
                     <div id="modal-profile-action-container"></div>
                 </div>
                 <p class="text-sm text-slate-300 mt-4 italic" id="modal-profile-bio"></p>
-                <div class="grid grid-cols-1 gap-4 mt-6 p-3 bg-[#121829]/60 border border-slate-800/60 rounded-xl text-center">
+                <div class="grid grid-cols-3 gap-4 mt-6 p-3 bg-[#121829]/60 border border-slate-800/60 rounded-xl text-center">
                     <div>
                         <p id="modal-profile-posts-count" class="text-base font-bold text-slate-100">0</p>
-                        <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Objave u bazi</p>
+                        <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Objave</p>
+                    </div>
+                    <div>
+                        <p id="modal-profile-followers-count" class="text-base font-bold text-slate-100">0</p>
+                        <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Pratitelji</p>
+                    </div>
+                    <div>
+                        <p id="modal-profile-following-count" class="text-base font-bold text-slate-100">0</p>
+                        <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Prati</p>
                     </div>
                 </div>
                 <div class="mt-6">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
-                        <i data-lucide="wine" class="w-3.5 h-3.5 text-pink-500"></i> Sve objave korisnika
+                        <i data-lucide="wine" class="w-3.5 h-3.5 text-pink-500"></i> Istaknute objave
                     </h4>
                     <div id="modal-profile-posts-list" class="space-y-2.5 max-h-[180px] overflow-y-auto pr-1"></div>
                 </div>
@@ -105,6 +71,7 @@
         </div>
     </div>
 
+    <!-- NOVI MODAL ZA UREĐIVANJE PROFILA -->
     <div id="edit-profile-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[110] hidden flex items-center justify-center p-4">
         <div class="bg-[#0b0f1f] border border-slate-800 rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative p-6 space-y-5">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -116,6 +83,7 @@
                 </button>
             </div>
 
+            <!-- Promjena profilne slike -->
             <div class="flex items-center gap-4 bg-[#121829]/40 p-3 rounded-2xl border border-slate-800/60">
                 <div class="relative">
                     <img id="edit-avatar-preview" src="" class="w-16 h-16 rounded-xl object-cover ring-2 ring-purple-500/40">
@@ -129,6 +97,7 @@
                 </div>
             </div>
 
+            <!-- Input polja -->
             <div class="space-y-3.5">
                 <div>
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Ime / Naziv profila</label>
@@ -144,6 +113,7 @@
                 </div>
             </div>
 
+            <!-- Dugmad na dnu -->
             <div class="flex gap-3 pt-2 border-t border-slate-800/60">
                 <button onclick="closeEditProfileModal()" class="flex-1 bg-slate-800 text-slate-400 font-bold text-xs py-2.5 rounded-xl border border-slate-700/50 hover:bg-slate-700 transition">Odustani</button>
                 <button onclick="saveProfileChanges()" class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs py-2.5 rounded-xl shadow-lg shadow-purple-600/20 transition">Spremi promjene</button>
@@ -151,10 +121,12 @@
         </div>
     </div>
 
+    <!-- GLAVNI KONTEJNER -->
     <div class="relative z-10 max-w-[1400px] mx-auto min-h-screen flex flex-col">
 
+        <!-- NAVIGACIJA -->
         <nav class="sticky top-0 z-50 backdrop-blur-xl bg-[#060813]/70 border-b border-slate-800/60 px-4 md:px-8 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3" onclick="fetchPosts()">
+            <div class="flex items-center gap-3" onclick="renderFeed()">
                 <div class="p-2 bg-gradient-to-tr from-purple-600 to-pink-600 rounded-xl shadow-lg shadow-purple-500/20">
                     <i data-lucide="map-pin" class="w-5 h-5 text-white animate-pulse"></i>
                 </div>
@@ -171,43 +143,42 @@
                     </span>
                     <span class="text-xs font-bold text-emerald-400 tracking-wide uppercase"><span id="online-count">134</span> na mreži</span>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2 pl-2 border-l border-slate-800 cursor-pointer" onclick="openProfile(currentUser.id)">
-                        <img id="nav-my-avatar" src="" class="w-8 h-8 rounded-full object-cover ring-2 ring-purple-500/30">
-                    </div>
-                    <button onclick="handleLogout()" class="text-slate-500 hover:text-pink-500 transition-colors p-1" title="Odjavi se">
-                        <i data-lucide="log-out" class="w-4 h-4"></i>
-                    </button>
+                <div class="hidden sm:flex items-center gap-2 pl-2 border-l border-slate-800 cursor-pointer" onclick="openProfile('me')">
+                    <img id="nav-my-avatar" src="" class="w-8 h-8 rounded-full object-cover ring-2 ring-purple-500/30">
                 </div>
             </div>
         </nav>
 
+        <!-- GLAVNI GRID -->
         <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 p-4 md:p-6">
             
+            <!-- LIJEVI SIDEBAR -->
             <aside class="hidden lg:block lg:col-span-3 space-y-6">
                 <div class="bg-[#0b0f1f]/60 backdrop-blur-md border border-slate-800/80 rounded-2xl p-4 sticky top-24">
                     <div class="space-y-1">
-                        <button onclick="fetchPosts()" class="w-full flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-purple-600/20 to-pink-600/5 text-purple-400 font-semibold rounded-xl border border-purple-500/20 transition">
+                        <a href="#" onclick="renderFeed()" class="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-purple-600/20 to-pink-600/5 text-purple-400 font-semibold rounded-xl border border-purple-500/20 transition group">
                             <i data-lucide="layout-grid" class="w-5 h-5"></i>
                             <span>Glavni Feed</span>
-                        </button>
-                        <button class="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 font-medium rounded-xl transition">
+                        </a>
+                        <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 font-medium rounded-xl transition group">
                             <i data-lucide="beer" class="w-5 h-5"></i>
                             <span>Pijanke u blizini</span>
-                        </button>
-                        <button onclick="openProfile(currentUser.id)" class="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 font-medium rounded-xl transition">
+                        </a>
+                        <a href="#" onclick="openProfile('me')" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 font-medium rounded-xl transition group">
                             <i data-lucide="user" class="w-5 h-5"></i>
                             <span>Moj Profil</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </aside>
 
+            <!-- SREDINA (FEED) -->
             <main class="col-span-1 lg:col-span-6 space-y-6">
                 
+                <!-- BOX ZA NOVU OBJAVU -->
                 <div class="bg-[#0b0f1f]/80 backdrop-blur-md border border-slate-800/80 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.3)] relative overflow-hidden">
                     <div class="flex gap-4">
-                        <img id="creator-my-avatar" src="" class="w-10 h-10 rounded-full object-cover border border-slate-700 cursor-pointer" onclick="openProfile(currentUser.id)">
+                        <img id="creator-my-avatar" src="" class="w-10 h-10 rounded-full object-cover border border-slate-700 cursor-pointer" onclick="openProfile('me')">
                         <div class="flex-1 space-y-3">
                             <textarea 
                                 id="post-textarea"
@@ -236,9 +207,11 @@
                     </div>
                 </div>
 
+                <!-- LIVE LISTA OBJAVA -->
                 <div id="feed-container" class="space-y-6"></div>
             </main>
 
+            <!-- DESNI SIDEBAR -->
             <aside class="hidden lg:block lg:col-span-3 space-y-6">
                 <div class="bg-[#0b0f1f]/60 backdrop-blur-md border border-slate-800/80 rounded-2xl p-4 sticky top-24">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2 px-2">
@@ -251,145 +224,140 @@
         </div>
     </div>
 
+    <!-- JAVASCRIPT KOJI POKREĆE SVE FUNKCIJE -->
     <script>
-        const SUPABASE_URL = "https://xqhhggavmyfirahywaey.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxaGhnZ2F2bXlmaXJhaHl3YWV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDkwMTIsImV4cCI6MjA5NTI4NTAxMn0.9813EFZQSuZqEM6kvJcBiXjoVJGjuluDa2FQ8phQXz8";
-
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        let currentUser = null;
-        let currentProfile = null;
-        let allProfiles = {};
-        let livePosts = [];
         let currentSelectedImageBase64 = "";
-        let temporaryAvatarBase64 = "";
+        let temporaryAvatarBase64 = ""; // Drži sliku tokom editovanja prije nego sačuvamo
 
-        function toggleAuthForms(showRegister) {
-            if (showRegister) {
-                document.getElementById('login-form').classList.add('hidden');
-                document.getElementById('register-form').classList.remove('hidden');
-            } else {
-                document.getElementById('register-form').classList.add('hidden');
-                document.getElementById('login-form').classList.remove('hidden');
+        // --- BAZA PODATAKA KORISNIKA ---
+        const usersDatabase = {
+            'me': { id: 'me', name: 'DIFIT', handle: '@difit_music', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80', bio: 'FL Studio, trap, drill i hladan Heineken. 🎧🔥', followers: 240, following: 180, isMe: true },
+            'u1': { id: 'u1', name: 'Sara', handle: '@sara_sa', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80', bio: 'Vikendi su rezervisani za klubove i dobru ekipu. 🍹', followers: 850, following: 430, isFollowing: false },
+            'u2': { id: 'u2', name: 'Ivan M.', handle: '@ivan_m99', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80', bio: 'Samo lagana priča i pub kvizovi. 🥃', followers: 310, following: 290, isFollowing: false },
+            'u3': { id: 'u3', name: 'Luka', handle: '@luka_brijeg', avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=100&auto=format&fit=crop&q=80', bio: 'Garaža, rostilj, pivo. 🍻', followers: 1200, following: 680, isFollowing: true },
+            'u4': { id: 'u4', name: 'Nikola K.', handle: '@nikola_k', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80', bio: 'U potrazi za najboljim šankom u državi.', followers: 450, following: 320, isFollowing: false }
+        };
+
+        // --- BAZA OBJAVA ---
+        let mockPosts = [
+            {
+                id: 'p1',
+                userKey: 'u1',
+                isHost: true,
+                timeAgo: 'Prije 22 min',
+                location: "caffe bar 'Element'",
+                text: 'Stigla tura, stol je rezervisan! Ko je u gradu neka naleti, ekipa se lagano skuplja. Večeras idemo do kraja! 🍹✨',
+                image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800&auto=format&fit=crop&q=80',
+                likesCount: 48,
+                hasLiked: false,
+                showComments: false,
+                comments: [
+                    { id: 'c1', userKey: 'u3', text: 'Evo stižem za 5 minuta, hladi čašu! 🏃‍♂️💨', likesCount: 4, hasLiked: false },
+                    { id: 'c2', userKey: 'u2', text: 'Jel ima mjesta za još dvojicu?', likesCount: 1, hasLiked: false }
+                ]
             }
-        }
+        ];
 
-        async function handleRegister() {
-            const email = document.getElementById('reg-email').value.trim();
-            const password = document.getElementById('reg-password').value.trim();
-            const fullName = document.getElementById('reg-name').value.trim();
-            const username = document.getElementById('reg-handle').value.trim().replace('@', '');
-
-            if (!email || !password || !fullName || !username) { alert("Sva polja su obavezna!"); return; }
-
-            const { data, error } = await supabase.auth.signUp({ email, password });
-            if (error) { alert("Greška prigodom registracije: " + error.message); return; }
-
-            if (data.user) {
-                const defaultAvatar = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80';
-                const { error: pErr } = await supabase
-                    .from('profiles')
-                    .insert([{ id: data.user.id, full_name: fullName, username: username, avatar_url: defaultAvatar, bio: 'Novi član ekipe! 🍻' }]);
-                
-                if (pErr) { alert("Greška s profilom: " + pErr.message); } 
-                else { alert("Profil napravljen! Sad se prijavi."); toggleAuthForms(false); }
-            }
-        }
-
-        async function handleLogin() {
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-            if (!email || !password) { alert("Popuni sva polja!"); return; }
-
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) { alert("Prijava neuspješna: " + error.message); return; }
-            checkUserSession();
-        }
-
-        async function handleLogout() {
-            await supabase.auth.signOut();
-            location.reload();
-        }
-
-        async function checkUserSession() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-                currentUser = session.user;
-                
-                const { data: profile } = await supabase.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
-                currentProfile = profile || { id: currentUser.id, full_name: 'Localo Član', username: 'korisnik', avatar_url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80', bio: 'Tu sam! 🎧' };
-                
-                document.getElementById('auth-screen').classList.add('hidden');
-                syncStaticAvatars();
-                await fetchAllProfiles();
-                fetchPosts();
-            } else {
-                document.getElementById('auth-screen').classList.remove('hidden');
-            }
-        }
-
+        // Osvježavanje avatara na glavnom interfejsu koji zavise od tebe
         function syncStaticAvatars() {
-            if (currentProfile) {
-                document.getElementById('nav-my-avatar').src = currentProfile.avatar_url;
-                document.getElementById('creator-my-avatar').src = currentProfile.avatar_url;
-            }
+            document.getElementById('nav-my-avatar').src = usersDatabase['me'].avatar;
+            document.getElementById('creator-my-avatar').src = usersDatabase['me'].avatar;
         }
 
-        async function fetchAllProfiles() {
-            const { data } = await supabase.from('profiles').select('*');
-            allProfiles = {};
-            if (data) {
-                data.forEach(p => { allProfiles[p.id] = p; });
-            }
-            allProfiles[currentUser.id] = currentProfile;
-            renderSidebarUsers();
-        }
-
-        async function fetchPosts() {
+        // --- RENDER FEED-A ---
+        function renderFeed() {
             const container = document.getElementById('feed-container');
-            try {
-                const { data, error } = await supabase
-                    .from('posts')
-                    .select('id, text, location, image_url, created_at, user_id')
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-                livePosts = data || [];
-                renderLiveFeed();
-            } catch (e) {
-                container.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Greška kod dohvaćanja feeda.</p>`;
-            }
-        }
-
-        function renderLiveFeed() {
-            const container = document.getElementById('feed-container');
-            if (livePosts.length === 0) {
-                container.innerHTML = `<p class="text-sm text-slate-500 italic text-center py-8">Nema objava večeras. Budi prvi koji će javiti gdje gori! 🍻</p>`;
-                return;
-            }
             container.innerHTML = '';
 
-            livePosts.forEach(post => {
-                const author = allProfiles[post.user_id] || { full_name: 'Član ekipe', username: 'korisnik', avatar_url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80' };
-                const imageHtml = post.image_url ? `<div class="rounded-2xl overflow-hidden border border-slate-800/80 max-h-[380px] mt-3"><img src="${post.image_url}" class="w-full h-full object-cover"></div>` : '';
-                const isMyPost = post.user_id === currentUser.id;
-                const deleteBtn = isMyPost ? `<button onclick="deletePost('${post.id}')" class="text-slate-600 hover:text-pink-500 transition p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : '';
+            mockPosts.forEach(post => {
+                const user = usersDatabase[post.userKey] || usersDatabase['me'];
+                
+                const imageHtml = post.image ? `
+                    <div class="rounded-2xl overflow-hidden border border-slate-800/80 max-h-[380px] mt-3">
+                        <img src="${post.image}" class="w-full h-full object-cover">
+                    </div>
+                ` : '';
+
+                const hostBadge = post.isHost ? `
+                    <span class="bg-purple-500/10 text-purple-400 text-[10px] font-bold px-2 py-0.5 rounded-md border border-purple-500/20">Domaćin</span>
+                ` : '';
+
+                const likeButtonClass = post.hasLiked ? 'text-pink-500 bg-pink-500/10 border-pink-500/30' : 'text-slate-400 bg-slate-800/20 border-slate-800/60';
+                const commentButtonClass = post.showComments ? 'text-purple-400 bg-purple-500/10 border-purple-500/30' : 'text-slate-400 bg-slate-800/20 border-slate-800/60';
+
+                let commentsHtml = '';
+                if (post.showComments) {
+                    commentsHtml = `
+                        <div class="mt-4 pt-4 border-t border-slate-800/60 space-y-3">
+                            <div class="flex gap-2.5 items-center">
+                                <img src="${usersDatabase['me'].avatar}" class="w-7 h-7 rounded-full object-cover">
+                                <input type="text" id="input-comment-${post.id}" placeholder="Napiši komentar..." class="flex-1 bg-[#121829] border border-slate-800/80 rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50">
+                                <button onclick="addComment('${post.id}')" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-[11px] px-3 py-1.5 rounded-xl transition">Pošalji</button>
+                            </div>
+                            <div class="space-y-2.5 pt-2 max-h-[250px] overflow-y-auto">
+                    `;
+
+                    if (post.comments.length === 0) {
+                        commentsHtml += `<p class="text-[11px] text-slate-500 italic px-1">Nema komentara. Budi prvi! 🥂</p>`;
+                    } else {
+                        post.comments.forEach(comment => {
+                            const cUser = usersDatabase[comment.userKey] || usersDatabase['me'];
+                            const isMyComment = comment.userKey === 'me';
+                            const cLikeClass = comment.hasLiked ? 'text-pink-500' : 'text-slate-500 hover:text-pink-400';
+                            const deleteBtnHtml = isMyComment ? `
+                                <button onclick="deleteComment('${post.id}', '${comment.id}')" class="text-slate-600 hover:text-pink-500 transition ml-2"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            ` : '';
+
+                            commentsHtml += `
+                                <div class="flex items-start gap-2.5 p-2 bg-[#121829]/40 rounded-xl border border-slate-800/20">
+                                    <img src="${cUser.avatar}" class="w-7 h-7 rounded-full object-cover cursor-pointer mt-0.5" onclick="openProfile('${cUser.id}')">
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-bold text-[12px] text-slate-300 hover:text-purple-400 cursor-pointer" onclick="openProfile('${cUser.id}')">${cUser.name}</span>
+                                            <div class="flex items-center gap-1.5">
+                                                <button onclick="toggleLikeComment('${post.id}', '${comment.id}')" class="flex items-center gap-1 text-[10px] ${cLikeClass} font-medium transition">
+                                                    <i data-lucide="heart" class="w-3 h-3"></i><span>${comment.likesCount}</span>
+                                                </button>
+                                                ${deleteBtnHtml}
+                                            </div>
+                                        </div>
+                                        <p class="text-xs text-slate-400 leading-relaxed mt-0.5">${comment.text}</p>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    commentsHtml += `</div></div>`;
+                }
 
                 const postElement = document.createElement('article');
-                postElement.className = 'bg-[#0b0f1f]/80 backdrop-blur-md border border-slate-800/80 rounded-3xl p-5 shadow-sm';
+                postElement.className = 'bg-[#0b0f1f]/80 backdrop-blur-md border border-slate-800/80 rounded-3xl p-5 shadow-[0_10px_25px_rgba(0,0,0,0.2)] hover:border-slate-700/60 transition-all duration-300';
                 postElement.innerHTML = `
                     <div class="flex justify-between items-center mb-4">
                         <div class="flex items-center gap-3">
-                            <img src="${author.avatar_url}" class="w-11 h-11 rounded-full object-cover cursor-pointer" onclick="openProfile('${post.user_id}')">
+                            <div class="relative cursor-pointer" onclick="openProfile('${post.userKey}')">
+                                <img src="${user.avatar}" class="w-11 h-11 rounded-full object-cover ring-2 ring-purple-500/20 hover:scale-105 transition">
+                            </div>
                             <div>
-                                <h4 class="font-bold text-sm text-slate-200 cursor-pointer" onclick="openProfile('${post.user_id}')">${author.full_name} <span class="text-xs text-slate-500">@${author.username}</span></h4>
-                                <p class="text-[11px] text-slate-500">Lokacija: ${post.location || 'Široki Brijeg'}</p>
+                                <div class="flex items-center gap-2">
+                                    <h4 onclick="openProfile('${post.userKey}')" class="font-bold text-sm text-slate-200 hover:text-purple-400 transition cursor-pointer">${user.name}</h4>
+                                    ${hostBadge}
+                                </div>
+                                <p class="text-[11px] text-slate-500 font-medium">${post.timeAgo} ${post.location ? '• ' + post.location : ''}</p>
                             </div>
                         </div>
-                        ${deleteBtn}
                     </div>
                     <p class="text-slate-300 text-sm leading-relaxed">${post.text}</p>
                     ${imageHtml}
+                    <div class="flex items-center gap-4 mt-4 pt-3 border-t border-slate-800/40 text-slate-400">
+                        <button onclick="toggleLike('${post.id}')" class="flex items-center gap-2 hover:text-pink-500 transition-colors px-3 py-1.5 rounded-xl border text-xs font-semibold ${likeButtonClass}">
+                            <i data-lucide="heart" class="w-4 h-4"></i><span>${post.likesCount}</span>
+                        </button>
+                        <button onclick="toggleCommentsSection('${post.id}')" class="flex items-center gap-2 hover:text-purple-400 transition-colors px-3 py-1.5 rounded-xl border text-xs font-semibold ${commentButtonClass}">
+                            <i data-lucide="message-square" class="w-4 h-4"></i><span>Komentari (${post.comments.length})</span>
+                        </button>
+                    </div>
+                    ${commentsHtml}
                 `;
                 container.appendChild(postElement);
             });
@@ -399,66 +367,49 @@
         function renderSidebarUsers() {
             const container = document.getElementById('users-sidebar');
             container.innerHTML = '';
-            let count = 0;
-
-            Object.keys(allProfiles).forEach(key => {
-                const u = allProfiles[key];
-                if (u.id === currentUser.id) return;
-                count++;
+            Object.keys(usersDatabase).forEach(key => {
+                const user = usersDatabase[key];
+                if (user.isMe) return;
+                const btnContent = user.isFollowing 
+                    ? `<button onclick="toggleFollow('${user.id}')" class="text-[10px] bg-slate-800 text-slate-400 px-3 py-1.5 rounded-lg font-bold border border-slate-700/50 transition">Pratiš</button>`
+                    : `<button onclick="toggleFollow('${user.id}')" class="text-[10px] bg-purple-600/10 text-purple-400 hover:bg-purple-600 hover:text-white border border-purple-500/20 px-3 py-1.5 rounded-lg font-bold transition">Prati</button>`;
 
                 const userElement = document.createElement('div');
                 userElement.className = 'flex items-center justify-between p-2 hover:bg-slate-800/30 rounded-xl transition';
                 userElement.innerHTML = `
-                    <div class="flex items-center gap-3 cursor-pointer" onclick="openProfile('${u.id}')">
+                    <div class="flex items-center gap-3 cursor-pointer" onclick="openProfile('${user.id}')">
                         <div class="relative">
-                            <img src="${u.avatar_url}" class="w-9 h-9 rounded-full object-cover">
+                            <img src="${user.avatar}" class="w-9 h-9 rounded-full object-cover ring-2 ring-emerald-500/20">
                             <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#0b0f1f] rounded-full"></div>
                         </div>
-                        <span class="font-semibold text-xs text-slate-300">${u.full_name}</span>
+                        <span class="font-semibold text-xs text-slate-300">${user.name}</span>
                     </div>
+                    ${btnContent}
                 `;
                 container.appendChild(userElement);
             });
-
-            if (count === 0) {
-                container.innerHTML = `<p class="text-[11px] text-slate-600 italic p-2">Nema drugih članova na mreži.</p>`;
-            }
         }
 
-        async function createNewPost() {
-            const textarea = document.getElementById('post-textarea');
-            const text = textarea.value.trim();
-            if (!text && !currentSelectedImageBase64) return;
-
-            const { error } = await supabase.from('posts').insert([{
-                user_id: currentUser.id,
-                text: text,
-                location: 'Široki Brijeg',
-                image_url: currentSelectedImageBase64 || null
-            }]);
-
-            if (error) { alert("Greška kod objave: " + error.message); } 
-            else { textarea.value = ''; removeSelectedImage(); fetchPosts(); }
-        }
-
-        async function deletePost(postId) {
-            if (!confirm("Obrisati ovu objavu?")) return;
-            const { error } = await supabase.from('posts').delete().eq('id', postId);
-            if (error) { alert(error.message); } else { fetchPosts(); }
-        }
-
+        // --- SISTEM UREĐIVANJA PROFILA (EDIT MODAL) ---
         function openEditProfileModal() {
-            document.getElementById('edit-input-name').value = currentProfile.full_name;
-            document.getElementById('edit-input-handle').value = currentProfile.username;
-            document.getElementById('edit-input-bio').value = currentProfile.bio || '';
-            document.getElementById('edit-avatar-preview').src = currentProfile.avatar_url;
-            temporaryAvatarBase64 = currentProfile.avatar_url;
+            const me = usersDatabase['me'];
+            
+            // Popuni polja trenutnim podacima iz baze
+            document.getElementById('edit-input-name').value = me.name;
+            document.getElementById('edit-input-handle').value = me.handle;
+            document.getElementById('edit-input-bio').value = me.bio;
+            document.getElementById('edit-avatar-preview').src = me.avatar;
+            temporaryAvatarBase64 = me.avatar; // Početno stanje je stara slika
 
+            // Prikaži prozor za editovanje
             document.getElementById('edit-profile-modal').classList.remove('hidden');
             lucide.createIcons();
         }
 
-        function closeEditProfileModal() { document.getElementById('edit-profile-modal').classList.add('hidden'); }
+        function closeEditProfileModal() {
+            document.getElementById('edit-profile-modal').classList.add('hidden');
+            document.getElementById('avatar-file-input').value = ""; // reset
+        }
 
         function handleAvatarSelect(event) {
             const file = event.target.files[0];
@@ -472,65 +423,63 @@
             }
         }
 
-        async function saveProfileChanges() {
+        function saveProfileChanges() {
             const newName = document.getElementById('edit-input-name').value.trim();
-            const newHandle = document.getElementById('edit-input-handle').value.trim().replace('@', '');
+            const newHandle = document.getElementById('edit-input-handle').value.trim();
             const newBio = document.getElementById('edit-input-bio').value.trim();
 
-            if (!newName || !newHandle) { alert("Sva polja su obavezna!"); return; }
+            if (!newName || !newHandle) {
+                alert("Ime i @handle ne smiju biti prazni!");
+                return;
+            }
 
-            const { error } = await supabase.from('profiles').update({
-                full_name: newName,
-                username: newHandle,
-                bio: newBio,
-                avatar_url: temporaryAvatarBase64
-            }).eq('id', currentUser.id);
+            // Sređivanje baze podataka novim vrijednostima uživo
+            usersDatabase['me'].name = newName;
+            usersDatabase['me'].handle = newHandle.startsWith('@') ? newHandle : '@' + newHandle;
+            usersDatabase['me'].bio = newBio;
+            usersDatabase['me'].avatar = temporaryAvatarBase64;
 
-            if (error) { alert("Greška: " + error.message); } 
-            else {
-                closeEditProfileModal();
-                closeProfileModal();
-                location.reload();
+            // Zatvori prozor i ponovo otvori ažurirani obični profil da se vidi rezultat
+            closeEditProfileModal();
+            syncStaticAvatars();
+            renderFeed();
+            openProfile('me');
+        }
+
+        // --- OSTALI HANDLERI (KOMENTARI, OBJAVE, LAJKOVI) ---
+        function toggleCommentsSection(postId) {
+            const post = mockPosts.find(p => p.id === postId);
+            if (post) { post.showComments = !post.showComments; renderFeed(); }
+        }
+
+        function addComment(postId) {
+            const inputElement = document.getElementById(`input-comment-${postId}`);
+            const commentText = inputElement.value.trim();
+            if (!commentText) return;
+
+            const post = mockPosts.find(p => p.id === postId);
+            if (post) {
+                post.comments.push({ id: 'c_' + Date.now(), userKey: 'me', text: commentText, likesCount: 0, hasLiked: false });
+                renderFeed();
             }
         }
 
-        function openProfile(userId) {
-            const user = allProfiles[userId];
-            if (!user) return;
-
-            document.getElementById('modal-profile-name').innerText = user.full_name;
-            document.getElementById('modal-profile-handle').innerText = '@' + user.username;
-            document.getElementById('modal-profile-avatar').src = user.avatar_url;
-            document.getElementById('modal-profile-bio').innerText = user.bio || '"Nema opisa."';
-
-            const userPosts = livePosts.filter(p => p.user_id === userId);
-            document.getElementById('modal-profile-posts-count').innerText = userPosts.length;
-
-            const actionContainer = document.getElementById('modal-profile-action-container');
-            if (userId === currentUser.id) {
-                actionContainer.innerHTML = `<button onclick="openEditProfileModal()" class="text-xs bg-[#1f293d] border border-slate-700 text-slate-200 px-4 py-2 rounded-xl font-bold hover:bg-slate-700 transition">Uredi profil</button>`;
-            } else {
-                actionContainer.innerHTML = '';
+        function toggleLikeComment(postId, commentId) {
+            const post = mockPosts.find(p => p.id === postId);
+            if (post) {
+                const comment = post.comments.find(c => c.id === commentId);
+                if (comment) {
+                    comment.hasLiked = !comment.hasLiked;
+                    comment.hasLiked ? comment.likesCount++ : comment.likesCount--;
+                    renderFeed();
+                }
             }
-
-            const listContainer = document.getElementById('modal-profile-posts-list');
-            listContainer.innerHTML = '';
-            if (userPosts.length === 0) {
-                listContainer.innerHTML = `<p class="text-xs text-slate-500 italic p-2">Korisnik nema objava.</p>`;
-            } else {
-                userPosts.forEach(post => {
-                    const item = document.createElement('div');
-                    item.className = 'p-2.5 bg-[#121829]/40 border border-slate-800/40 rounded-xl text-xs text-slate-300';
-                    item.innerHTML = `<p class="line-clamp-3">${post.text}</p>`;
-                    listContainer.appendChild(item);
-                });
-            }
-
-            document.getElementById('profile-modal').classList.remove('hidden');
-            lucide.createIcons();
         }
 
-        function closeProfileModal() { document.getElementById('profile-modal').classList.add('hidden'); }
+        function deleteComment(postId, commentId) {
+            const post = mockPosts.find(p => p.id === postId);
+            if (post) { post.comments = post.comments.filter(c => c.id !== commentId); renderFeed(); }
+        }
 
         function handleFileSelect(event) {
             const file = event.target.files[0];
@@ -551,12 +500,105 @@
             document.getElementById('file-input').value = "";
         }
 
-        window.onload = function() {
-            checkUserSession();
+        function createNewPost() {
+            const textarea = document.getElementById('post-textarea');
+            const text = textarea.value.trim();
+            if (!text && !currentSelectedImageBase64) return;
+
+            mockPosts.unshift({
+                id: 'p_' + Date.now(),
+                userKey: 'me',
+                isHost: true,
+                timeAgo: 'Upravo sada',
+                location: 'Lokalno',
+                text: text,
+                image: currentSelectedImageBase64,
+                likesCount: 0,
+                hasLiked: false,
+                showComments: false,
+                comments: []
+            });
+            textarea.value = '';
+            removeSelectedImage();
+            renderFeed();
+        }
+
+        function toggleLike(postId) {
+            const post = mockPosts.find(p => p.id === postId);
+            if (post) {
+                post.hasLiked = !post.hasLiked;
+                post.hasLiked ? post.likesCount++ : post.likesCount--;
+                renderFeed();
+            }
+        }
+
+        function toggleFollow(userId) {
+            const user = usersDatabase[userId];
+            if (user) {
+                user.isFollowing = !user.isFollowing;
+                user.isFollowing ? user.followers++ : user.followers--;
+                renderSidebarUsers();
+            }
+        }
+
+        function openProfile(userKey) {
+            const user = usersDatabase[userKey];
+            if (!user) return;
+
+            document.getElementById('modal-profile-name').innerText = user.name;
+            document.getElementById('modal-profile-handle').innerText = user.handle;
+            document.getElementById('modal-profile-avatar').src = user.avatar;
+            document.getElementById('modal-profile-bio').innerText = user.bio || '"Nema opisa."';
+            document.getElementById('modal-profile-followers-count').innerText = user.followers;
+            document.getElementById('modal-profile-following-count').innerText = user.following;
+
+            const userPosts = mockPosts.filter(p => p.userKey === userKey);
+            document.getElementById('modal-profile-posts-count').innerText = userPosts.length;
+
+            const actionContainer = document.getElementById('modal-profile-action-container');
+            if (user.isMe) {
+                // SADA OVO DUGME POKREĆE MODAL ZA UREĐIVANJE
+                actionContainer.innerHTML = `<button onclick="openEditProfileModal()" class="text-xs bg-[#1f293d] border border-slate-700 text-slate-200 px-4 py-2 rounded-xl font-bold hover:bg-slate-700 transition">Uredi profil</button>`;
+            } else {
+                if (user.isFollowing) {
+                    actionContainer.innerHTML = `<button onclick="toggleFollow('${user.id}'); openProfile('${user.id}')" class="text-xs bg-slate-800 text-slate-400 px-4 py-2 rounded-xl font-bold border border-slate-700/50 transition">Pratiš</button>`;
+                } else {
+                    actionContainer.innerHTML = `<button onclick="toggleFollow('${user.id}'); openProfile('${user.id}')" class="text-xs bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-xl font-bold transition shadow-md">Prati</button>`;
+                }
+            }
+
+            const listContainer = document.getElementById('modal-profile-posts-list');
+            listContainer.innerHTML = '';
+            if (userPosts.length === 0) {
+                listContainer.innerHTML = `<p class="text-xs text-slate-500 italic p-2">Korisnik još nema objavljenih pijanki.</p>`;
+            } else {
+                userPosts.forEach(post => {
+                    const item = document.createElement('div');
+                    item.className = 'p-2.5 bg-[#121829]/40 border border-slate-800/40 rounded-xl text-xs text-slate-300';
+                    item.innerHTML = `<div class="flex justify-between text-[10px] text-slate-500 mb-1 font-medium"><span>${post.timeAgo}</span><span class="text-purple-400">${post.location || ''}</span></div><p class="line-clamp-2">${post.text}</p>`;
+                    listContainer.appendChild(item);
+                });
+            }
+
+            document.getElementById('profile-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeProfileModal() { document.getElementById('profile-modal').classList.add('hidden'); }
+
+        function simulateOnlineUsers() {
+            const countElement = document.getElementById('online-count');
             setInterval(() => {
-                const countElement = document.getElementById('online-count');
-                if (countElement) countElement.innerText = Math.floor(Math.random() * (150 - 110 + 1)) + 110;
+                countElement.innerText = Math.floor(Math.random() * (150 - 110 + 1)) + 110;
             }, 5000);
+        }
+
+        window.onload = function() {
+            syncStaticAvatars();
+            renderFeed();
+            renderSidebarUsers();
+            simulateOnlineUsers();
+            lucide.createIcons();
         };
     </script>
 </body>
